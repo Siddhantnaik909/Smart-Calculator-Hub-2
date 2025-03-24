@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #1e1e2f; /* Dark Background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-top: 60px; /* Prevent content from hiding behind navbar */
+        }
+
+        /* Navbar */
+        nav {
+            background: #222;
+            padding: 15px 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover, nav ul li a.active {
+            background: #ff9800;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(255, 152, 0, 0.5);
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .menu-toggle div {
+            width: 30px;
+            height: 4px;
+            background: white;
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+        /* Responsive Navbar */
+        @media screen and (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                width: 100%;
+                background: #222;
+                text-align: center;
+                padding: 10px 0;
+            }
+            nav ul.active {
+                display: flex;
+            }
+            nav ul li {
+                margin: 10px 0;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* Container */
+        .container {
+            background: #fff;
+            padding: 25px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .btn-calculate { background: #28a745; color: white; }
+        .btn-calculate:hover { background: #218838; }
+        .btn-reset { background: #dc3545; color: white; }
+        .btn-reset:hover { background: #c82333; }
+        #result {
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="age_calculator.html">Age Calculator</a></li>
+        <li><a href="BMI.html">BMI Calculator</a></li>
+        <li><a href="emi.html">EMI Calculator</a></li>
+        <li><a href="math_calculator.html">Math Calculator</a></li>
+        <li><a href="percentage.html">Percentage Calculator</a></li>
+        <li><a href="table_maker.html">Multiplication Table Maker</a></li>
+    </ul>
+    </nav>
+
+    <!-- Calculator -->
+    <div class="container">
+        <h2>Percentage Calculator</h2>
+
+        <label for="calcType">Select Calculation Type:</label>
+        <select id="calcType" onchange="updateFields()">
+            <option value="percentageOf">Find X% of Y</option>
+            <option value="whatPercentage">Find what % X is of Y</option>
+            <option value="percentageChange">Find % increase/decrease</option>
+        </select>
+
+        <label for="num1" id="label1">Enter X (%):</label>
+        <input type="number" id="num1" placeholder="Enter first number" oninput="calculatePercentage()">
+
+        <label for="num2" id="label2">Enter Y:</label>
+        <input type="number" id="num2" placeholder="Enter second number" oninput="calculatePercentage()">
+
+        <button class="btn-reset" onclick="resetCalculator()">Reset</button>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function updateFields() {
+            let calcType = document.getElementById("calcType").value;
+            let label1 = document.getElementById("label1");
+            let label2 = document.getElementById("label2");
+
+            if (calcType === "percentageOf") {
+                label1.innerText = "Enter X (%):";
+                label2.innerText = "Enter Y:";
+            } else if (calcType === "whatPercentage") {
+                label1.innerText = "Enter X:";
+                label2.innerText = "Enter Y:";
+            } else if (calcType === "percentageChange") {
+                label1.innerText = "Initial Value:";
+                label2.innerText = "Final Value:";
+            }
+            calculatePercentage();
+        }
+
+        function calculatePercentage() {
+            let calcType = document.getElementById("calcType").value;
+            let num1 = parseFloat(document.getElementById("num1").value);
+            let num2 = parseFloat(document.getElementById("num2").value);
+            let result = "";
+
+            if (isNaN(num1) || isNaN(num2) || num2 === 0) {
+                document.getElementById("result").innerText = "";
+                return;
+            }
+
+            if (calcType === "percentageOf") {
+                result = (num1 / 100) * num2;
+                document.getElementById("result").innerText = `${num1}% of ${num2} is ${result}`;
+            } else if (calcType === "whatPercentage") {
+                result = (num1 / num2) * 100;
+                document.getElementById("result").innerText = `${num1} is ${result.toFixed(2)}% of ${num2}`;
+            } else if (calcType === "percentageChange") {
+                result = ((num2 - num1) / num1) * 100;
+                document.getElementById("result").innerText = `Percentage change: ${Math.abs(result).toFixed(2)}%`;
+            }
+        }
+
+        function resetCalculator() {
+            document.getElementById("num1").value = "";
+            document.getElementById("num2").value = "";
+            document.getElementById("result").innerText = "";
+        }
+
+        function toggleMenu() {
+            document.querySelector("nav ul").classList.toggle("active");
+        }
+    </script>
+
+</body>
+</html>

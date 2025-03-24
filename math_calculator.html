@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #1e1e2f;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-top: 60px;
+        }
+
+        /* Navbar */
+        nav {
+            background: #222;
+            padding: 15px 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            background: #ff9800;
+            border-radius: 5px;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle div {
+            width: 30px;
+            height: 4px;
+            background: white;
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+        /* Responsive Navbar */
+        @media screen and (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                width: 100%;
+                background: #222;
+                text-align: center;
+                padding: 10px 0;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+        }
+
+        /* Calculator */
+        .container {
+            background: black;
+            padding: 25px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #display {
+            width: 100%;
+            height: 50px;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            background: #222;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .dial-pad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .dial-pad button {
+            padding: 15px;
+            font-size: 20px;
+            border: none;
+            background: #333;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 60px;
+            height: 60px;
+        }
+
+        .dial-pad button:nth-child(4n) {
+            background: #555;
+        }
+
+        .dial-pad button:last-child {
+            background: #5a75ff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+       <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="age_calculator.html">Age Calculator</a></li>
+        <li><a href="BMI.html">BMI Calculator</a></li>
+        <li><a href="emi.html">EMI Calculator</a></li>
+        <li><a href="math_calculator.html">Math Calculator</a></li>
+        <li><a href="percentage.html">Percentage Calculator</a></li>
+        <li><a href="table_maker.html">Multiplication Table Maker</a></li>
+    </ul>
+    </nav>
+
+    <!-- Calculator -->
+    <div class="container">
+        <input type="text" id="display" disabled>
+        
+        <div class="dial-pad">
+            <button onclick="clearDisplay()">AC</button>
+            <button onclick="backspace()">⌫</button>
+            <button onclick="toggleSign()">+/-</button>
+            <button onclick="appendValue('/')">÷</button>
+
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button onclick="appendValue('*')">×</button>
+
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button onclick="appendValue('-')">-</button>
+
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button onclick="appendValue('+')">+</button>
+
+            <button onclick="appendValue('%')">%</button>
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector("nav ul").classList.toggle("active");
+        }
+
+        function appendValue(value) {
+            let display = document.getElementById("display");
+            let currentValue = display.value;
+
+            if ("+-*/%".includes(value) && "+-*/%".includes(currentValue.slice(-1))) {
+                return;
+            }
+
+            if (currentValue === "" && "+*/%".includes(value)) {
+                return;
+            }
+
+            let parts = currentValue.split(/[\+\-\*\/\%]/);
+            let lastPart = parts[parts.length - 1];
+            if (value === "." && lastPart.includes(".")) {
+                return;
+            }
+
+            display.value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById("display").value = "";
+        }
+
+        function backspace() {
+            let display = document.getElementById("display");
+            display.value = display.value.slice(0, -1);
+        }
+
+        function toggleSign() {
+            let display = document.getElementById("display");
+            if (display.value && !"+-*/%".includes(display.value.slice(-1))) {
+                display.value = display.value.startsWith("-") ? display.value.slice(1) : "-" + display.value;
+            }
+        }
+
+        function calculateResult() {
+            let display = document.getElementById("display").value;
+            if ("+-*/%".includes(display.slice(-1))) {
+                return;
+            }
+
+            try {
+                let result = eval(display);
+                document.getElementById("display").value = result;
+            } catch {
+                document.getElementById("display").value = "Error";
+            }
+        }
+    </script>
+
+</body>
+    </html>

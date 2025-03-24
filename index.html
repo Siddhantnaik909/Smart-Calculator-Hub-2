@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Calculator Hub - A collection of financial, math, and health calculators to simplify your daily calculations.">
+    <meta name="keywords" content="calculator, EMI, BMI, age calculator, percentage, math, multiplication table">
+    <title>Smart Calculator Hub</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #1e1e2f;
+            color: white;
+            text-align: center;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #222;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo a {
+            font-size: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin: 10px 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            padding: 8px 12px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #ff9800;
+            border-radius: 10px;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle div {
+            width: 30px;
+            height: 4px;
+            background: white;
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 40px;
+            background: #333;
+        }
+
+        .hero h1 {
+            font-size: 28px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        /* Calculator List */
+        .calculator-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .calculator-card {
+            background: #222;
+            width: 300px;
+            padding: 20px;
+            margin: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .calculator-card h2 {
+            color: #ff9800;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px;
+            margin-top: 10px;
+            color: white;
+            background: #ff9800;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #e68a00;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background: #333;
+                position: absolute;
+                width: 100%;
+                top: 60px;
+                left: 0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* Footer */
+          footer {
+         background-color: #222;
+         text-align: center;
+         padding: 20px;
+         position: relative;
+       }
+
+         .social-link {
+          margin: 0 15px;
+          text-decoration: none;
+          color: #007BFF;
+          font-size: 24px; /* Adjust icon size */
+         }
+
+          .social-link:hover {
+          color: #0056b3; /* Change color on hover */
+          }
+
+        .copyright-text {
+         font-size: 14px; /* Adjust the font size as needed */
+         color: #ffffff; /* Change text color */
+          margin-top: 10px; /* Add some space above the copyright text */
+       }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">Smart Calculator Hub</a>
+        </div>
+
+        <!-- Hamburger Menu -->
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="age_calculator.html">Age Calculator</a></li>
+            <li><a href="BMI.html">BMI Calculator</a></li>
+            <li><a href="emi.html">EMI Calculator</a></li>
+            <li><a href="math_calculator.html">Math Calculator</a></li>
+            <li><a href="percentage.html">Percentage Calculator</a></li>
+            <li><a href="table_maker.html">Multiplication Table Maker</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <header class="hero">
+        <h1>Welcome to Smart Calculator Hub</h1>
+        <p>Your one-stop destination for essential calculators.</p>
+    </header>
+
+    <section class="calculator-list">
+        <div class="calculator-card">
+            <h2>Age Calculator</h2>
+            <p>Calculate your exact age in years, months, and days.</p>
+            <a href="age_calculator.html" class="btn">Try Now</a>
+        </div>
+
+        <div class="calculator-card">
+            <h2>BMI Calculator</h2>
+            <p>Find out if you're in a healthy weight range.</p>
+            <a href="BMI.html" class="btn">Try Now</a>
+        </div>
+
+        <div class="calculator-card">
+            <h2>EMI Calculator</h2>
+            <p>Plan your loan payments effectively.</p>
+            <a href="emi.html" class="btn">Try Now</a>
+        </div>
+
+        <div class="calculator-card">
+            <h2>Math Calculator</h2>
+            <p>Perform advanced math operations with ease.</p>
+            <a href="math_calculator.html" class="btn">Try Now</a>
+        </div>
+
+        <div class="calculator-card">
+            <h2>Percentage Calculator</h2>
+            <p>Quickly calculate percentage values.</p>
+            <a href="percentage.html" class="btn">Try Now</a>
+        </div>
+
+        <div class="calculator-card">
+            <h2>Multiplication Table Maker</h2>
+            <p>Generate multiplication tables dynamically.</p>
+            <a href="table_maker.html" class="btn">Try Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <a href="https://wa.me/919137467516" class="social-link" target="_blank" title="Message Siddhant Naik on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.instagram.com/siddhantnaik909?igsh=bWp6Ym54Nzh2a3Ux" class="social-link" target="_blank" title="Follow Siddhant Naik on Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://github.com/Siddhantnaik909" class="social-link" target="_blank" title="View Siddhant Naik's GitHub">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/siddhant-naik-349170333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link" target="_blank" title="Connect with Siddhant Naik on LinkedIn">
+            <i class="fab fa-linkedin"></i>
+        </a>
+      <p class="copyright-text">&copy; 2025 Smart Calculator Hub. All rights reserved.</p>
+
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            let navLinks = document.querySelector(".nav-links");
+            navLinks.classList.toggle("active");
+
+            // Animate Hamburger Icon
+            let menuToggle = document.querySelector(".menu-toggle");
+            menuToggle.classList.toggle("open");
+
+            // Animate lines
+            let lines = menuToggle.querySelectorAll("div");
+            if (menuToggle.classList.contains("open")) {
+                lines[0].style.transform = "rotate(45deg) translate(5px, 5px)";
+                lines[1].style.opacity = "0";
+                lines[2].style.transform = "rotate(-45deg) translate(5px, -5px)";
+            } else {
+                lines[0].style.transform = "rotate(0)";
+                lines[1].style.opacity = "1";
+                lines[2].style.transform = "rotate(0)";
+            }
+        }
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector(".nav-links").classList.remove("active");
+                document.querySelector(".menu-toggle").classList.remove("open");
+            });
+        });
+    </script>
+
+</body>
+</html>
+      

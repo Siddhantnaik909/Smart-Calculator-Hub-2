@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #1e1e2f; /* Dark Background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-top: 60px; /* Prevent content from hiding behind navbar */
+        }
+
+        /* Navbar */
+        nav {
+            background: #222;
+            padding: 15px 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover, nav ul li a.active {
+            background: #ff9800;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(255, 152, 0, 0.5);
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .menu-toggle div {
+            width: 30px;
+            height: 4px;
+            background: white;
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+        /* Responsive Navbar */
+        @media screen and (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                width: 100%;
+                background: #222;
+                text-align: center;
+                padding: 10px 0;
+            }
+            nav ul.active {
+                display: flex;
+            }
+            nav ul li {
+                margin: 10px 0;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* Container */
+        .container {
+            background: #fff;
+            padding: 25px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .btn-calculate { background: #28a745; color: white; }
+        .btn-calculate:hover { background: #218838; }
+        .btn-reset { background: #dc3545; color: white; }
+        .btn-reset:hover { background: #c82333; }
+        #result {
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="age_calculator.html">Age Calculator</a></li>
+        <li><a href="BMI.html">BMI Calculator</a></li>
+        <li><a href="emi.html">EMI Calculator</a></li>
+        <li><a href="math_calculator.html">Math Calculator</a></li>
+        <li><a href="percentage.html">Percentage Calculator</a></li>
+        <li><a href="table_maker.html">Multiplication Table Maker</a></li>
+    </ul>
+    </nav>
+
+    <!-- BMI Calculator -->
+    <div class="container">
+        <h2>BMI Calculator</h2>
+
+        <label for="weight">Weight:</label>
+        <input type="number" id="weight" placeholder="Enter weight">
+        <select id="weightUnit">
+            <option value="kg">kg</option>
+            <option value="lbs">lbs</option>
+        </select>
+
+        <label for="height">Height:</label>
+        <input type="number" id="height" placeholder="Enter height">
+        <select id="heightUnit">
+            <option value="m">m</option>
+            <option value="cm">cm</option>
+            <option value="in">in</option>
+        </select>
+
+        <button class="btn-calculate" onclick="calculateBMI()">Calculate BMI</button>
+        <button class="btn-reset" onclick="resetCalculator()">Reset</button>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            let weight = parseFloat(document.getElementById("weight").value);
+            let height = parseFloat(document.getElementById("height").value);
+            let weightUnit = document.getElementById("weightUnit").value;
+            let heightUnit = document.getElementById("heightUnit").value;
+
+            if (weight > 0 && height > 0) {
+                // Convert weight to kg if needed
+                if (weightUnit === "lbs") weight = weight * 0.453592;
+
+                // Convert height to meters if needed
+                if (heightUnit === "cm") height = height / 100;
+                else if (heightUnit === "in") height = height * 0.0254;
+
+                let bmi = weight / (height * height);
+                let category = "";
+
+                if (bmi < 18.5) category = "Underweight";
+                else if (bmi < 24.9) category = "Normal weight";
+                else if (bmi < 29.9) category = "Overweight";
+                else category = "Obese";
+
+                document.getElementById("result").innerHTML = `Your BMI is ${bmi.toFixed(2)} (${category})`;
+            } else {
+                document.getElementById("result").innerHTML = "Please enter valid values!";
+            }
+        }
+
+        function resetCalculator() {
+            document.getElementById("weight").value = "";
+            document.getElementById("height").value = "";
+            document.getElementById("result").innerText = "";
+        }
+
+        function toggleMenu() {
+            document.querySelector("nav ul").classList.toggle("active");
+        }
+    </script>
+
+</body>
+</html>
