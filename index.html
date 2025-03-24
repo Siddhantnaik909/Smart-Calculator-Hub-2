@@ -14,12 +14,19 @@
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
+            transition: background 0.3s, color 0.3s; /* Smooth transition for background and text color */
         }
 
         body {
-            background: #1e1e2f;
-            color: white;
+            background: #f4f4f4; /* Light gray background */
+            color: #333333; /* Dark text color */
             text-align: center;
+        }
+
+        /* Dark Theme Styles */
+        body.dark {
+            background: #121212; /* Dark background */
+            color: #ffffff; /* White text */
         }
 
         /* Navbar */
@@ -27,7 +34,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #222;
+            background: #222222; /* Dark gray */
             padding: 20px;
             position: fixed;
             width: 100%;
@@ -39,7 +46,7 @@
             font-size: 25px;
             font-weight: bold;
             text-decoration: none;
-            color: white;
+            color: #ffffff; /* White */
         }
 
         .nav-links {
@@ -53,45 +60,47 @@
 
         .nav-links a {
             text-decoration: none;
-            color: white;
+            color: #ffffff; /* White */
             padding: 8px 12px;
             transition: 0.3s;
         }
 
         .nav-links a:hover {
-            background: #ff9800;
+            background: #ff9800; /* Bright orange */
             border-radius: 10px;
-        }
-
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .menu-toggle div {
-            width: 30px;
-            height: 4px;
-            background: white;
-            margin: 5px 0;
-            transition: 0.4s;
         }
 
         /* Hero Section */
         .hero {
             margin-top: 80px;
             padding: 40px;
-            background: #333;
+            background: #ffffff; /* White */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s; /* Smooth transition for background */
+        }
+
+        .hero.dark {
+            background: #333333; /* Dark gray */
+            color: #ffffff; /* White text for dark mode */
         }
 
         .hero h1 {
             font-size: 28px;
+            color: #333333; /* Dark gray */
+        }
+
+        .hero.dark h1 {
+            color: #ffffff; /* White text for dark mode */
         }
 
         .hero p {
             font-size: 16px;
             margin-top: 10px;
+            color: #555555; /* Medium gray */
+        }
+
+        .hero.dark p {
+            color: #dddddd; /* Light gray for better visibility in dark mode */
         }
 
         /* Calculator List */
@@ -103,16 +112,21 @@
         }
 
         .calculator-card {
-            background: #222;
+            background: #ffffff; /* White */
             width: 300px;
             padding: 20px;
             margin: 15px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s; /* Smooth transition for background */
+        }
+
+        .calculator-card.dark {
+            background: #444444; /* Dark gray */
         }
 
         .calculator-card h2 {
-            color: #ff9800;
+            color: #ff9800; /* Bright orange */
         }
 
         .btn {
@@ -120,14 +134,14 @@
             padding: 10px;
             margin-top: 10px;
             color: white;
-            background: #ff9800;
+            background: #ff9800; /* Bright orange */
             text-decoration: none;
             border-radius: 5px;
             transition: 0.3s;
         }
 
         .btn:hover {
-            background: #e68a00;
+            background: #e68a00; /* Darker orange */
         }
 
         /* Responsive */
@@ -135,7 +149,7 @@
             .nav-links {
                 display: none;
                 flex-direction: column;
-                background: #333;
+                background: #333333; /* Dark gray */
                 position: absolute;
                 width: 100%;
                 top: 60px;
@@ -152,29 +166,43 @@
         }
 
         /* Footer */
-          footer {
-         background-color: #222;
-         text-align: center;
-         padding: 20px;
-         position: relative;
-       }
+        footer {
+            background-color: #222222; /* Dark gray */
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
 
-         .social-link {
-          margin: 0 15px;
-          text-decoration: none;
-          color: #007BFF;
-          font-size: 24px; /* Adjust icon size */
-         }
+        .social-link {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007BFF; /* Light blue */
+            font-size: 24px; /* Adjust icon size */
+        }
 
-          .social-link:hover {
-          color: #0056b3; /* Change color on hover */
-          }
+        .social-link:hover {
+            color: #0056b3; /* Darker blue on hover */
+        }
 
         .copyright-text {
-         font-size: 14px; /* Adjust the font size as needed */
-         color: #ffffff; /* Change text color */
-          margin-top: 10px; /* Add some space above the copyright text */
-       }
+            font-size: 14px; /* Adjust the font size as needed */
+            color: #ffffff; /* White */
+            margin-top: 10px; /* Add some space above the copyright text */
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            cursor: pointer;
+            background: transparent; /* Transparent background */
+            border: none; /* No border */
+            color: #ffffff; /* White */
+            font-size: 24px; /* Icon size */
+            transition: color 0.3s; /* Smooth transition for color */
+        }
+
+        .theme-toggle:hover {
+            color: #ff9800; /* Change color on hover */
+        }
     </style>
 </head>
 <body>
@@ -184,6 +212,11 @@
         <div class="logo">
             <a href="index.html">Smart Calculator Hub</a>
         </div>
+
+        <!-- Theme Toggle Button with Icons -->
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-sun" id="theme-icon"></i> <!-- Sun icon for light theme -->
+        </button>
 
         <!-- Hamburger Menu -->
         <div class="menu-toggle" onclick="toggleMenu()">
@@ -261,8 +294,7 @@
         <a href="https://www.linkedin.com/in/siddhant-naik-349170333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link" target="_blank" title="Connect with Siddhant Naik on LinkedIn">
             <i class="fab fa-linkedin"></i>
         </a>
-      <p class="copyright-text">&copy; 2025 Smart Calculator Hub. All rights reserved.</p>
-
+        <p class="copyright-text">&copy; 2025 Smart Calculator Hub. All rights reserved.</p>
     </footer>
 
     <script>
@@ -294,8 +326,25 @@
                 document.querySelector(".menu-toggle").classList.remove("open");
             });
         });
+
+        // Theme toggle function
+        function toggleTheme() {
+            document.body.classList.toggle("dark");
+            document.querySelectorAll('.hero, .calculator-card').forEach(element => {
+                element.classList.toggle("dark");
+            });
+
+            // Change icon based on theme
+            const themeIcon = document.getElementById("theme-icon");
+            if (document.body.classList.contains("dark")) {
+                themeIcon.classList.remove("fa-sun");
+                themeIcon.classList.add("fa-moon"); // Moon icon for dark theme
+            } else {
+                themeIcon.classList.remove("fa-moon");
+                themeIcon.classList.add("fa-sun"); // Sun icon for light theme
+            }
+        }
     </script>
 
 </body>
 </html>
-      
