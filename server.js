@@ -14,8 +14,6 @@ app.use(bodyParser.json());
 // Serve static files from the root directory
 app.use(express.static(path.join(__dirname, '/')));
 
-// --- MongoDB Connection ---
-const mongoURI = "mongodb+srv://siddhantnaik909_db_user:Siddhant1234@signupdata.j4ihkir.mongodb.net/?retryWrites=true&w=majority&appName=SignUpData"; 
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected successfully.'))
