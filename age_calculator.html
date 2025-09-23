@@ -4,141 +4,221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Age Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #6f42c1;
+            --primary-hover-color: #5a3d9a;
+            --secondary-color: #6c757d;
+            --success-color: #20c997;
+            --success-hover-color: #1ba982;
+            --danger-color: #dc3545;
+            --light-bg: #f8f9fa;
+            --dark-bg: #1a1a1a;
+            --light-container-bg: #ffffff;
+            --dark-container-bg: #2c2c2c;
+            --light-text: #343a40;
+            --dark-text: #f8f9fa;
+            --light-border: #ccc;
+            --dark-border: #555;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
+
         body {
-            background: #1e1e2f; /* Dark Background */
+            background: var(--light-bg);
+            color: var(--light-text);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding-top: 60px; /* Prevent content from hiding behind navbar */
+            padding-top: 80px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: var(--dark-text);
         }
 
         /* Navbar */
         nav {
             background: #222;
-            padding: 15px 20px;
+            padding: 1rem 2rem;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             position: fixed;
             top: 0;
             left: 0;
             z-index: 1000;
         }
+        
+        nav a.logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
         nav ul {
             list-style: none;
             display: flex;
+            gap: 20px;
         }
-        nav ul li {
-            margin: 0 15px;
-        }
-        nav ul li a {
+
+        nav a {
             color: white;
             text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
-            transition: 0.3s;
-        }
-        nav ul li a:hover, nav ul li a.active {
-            background: #ff9800;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
             border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(255, 152, 0, 0.5);
+            transition: background-color 0.3s;
         }
 
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
+        nav ul a:hover, nav ul a.active {
+            background-color: var(--primary-hover-color);
+        }
+        
+        .theme-toggle {
             cursor: pointer;
-        }
-        .menu-toggle div {
-            width: 30px;
-            height: 4px;
-            background: white;
-            margin: 5px 0;
-            transition: 0.4s;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            margin-left: 15px;
         }
 
-        /* Responsive Navbar */
-        @media screen and (max-width: 768px) {
-            nav ul {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 55px;
-                left: 0;
-                width: 100%;
-                background: #222;
-                text-align: center;
-                padding: 10px 0;
-            }
-            nav ul.active {
-                display: flex;
-            }
-            nav ul li {
-                margin: 10px 0;
-            }
-            .menu-toggle {
-                display: flex;
-            }
+        .nav-buttons {
+            display: flex;
+            align-items: center;
         }
 
         /* Container */
         .container {
-            background: #fff;
-            padding: 25px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
+            background: var(--light-container-bg);
+            color: var(--light-text);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 90%;
-            max-width: 400px;
-            text-align: center;
+            max-width: 500px;
             margin-top: 20px;
+            transition: background 0.3s, color 0.3s;
         }
+
+        body.dark-mode .container {
+            background: var(--dark-container-bg);
+            color: var(--dark-text);
+        }
+
         h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 22px;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
         }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
         label {
-            font-size: 16px;
-            font-weight: bold;
             display: block;
-            margin-top: 10px;
+            margin-bottom: 0.7rem;
+            font-weight: 500;
+            color: var(--secondary-color);
         }
-        input {
+
+        input[type="date"] {
             width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 0.9rem;
+            border: 1px solid var(--light-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--light-bg);
+            color: var(--light-text);
+            transition: all 0.3s;
         }
+        
+        body.dark-mode input[type="date"] {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(111, 66, 193, 0.5);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
         button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
+            padding: 0.9rem;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s;
         }
-        .btn-reset { background: #dc3545; color: white; }
-        .btn-reset:hover { background: #c82333; }
+
+        .btn-calculate {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-calculate:hover {
+            background-color: var(--success-hover-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
         #result {
-            font-weight: bold;
-            color: #333;
-            margin-top: 20px;
-            font-size: 18px;
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        body.dark-mode #result {
+            background: var(--dark-bg);
+        }
+
+        #result p {
+            margin-bottom: 0.5rem;
+        }
+
+        #result strong {
+            color: var(--primary-color);
         }
     </style>
 </head>
@@ -146,80 +226,115 @@
 
     <!-- Navbar -->
     <nav>
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+        <a href="index.html" class="logo">Smart Calculators</a>
         <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="age_calculator.html">Age Calculator</a></li>
-        <li><a href="BMI.html">BMI Calculator</a></li>
-        <li><a href="emi.html">EMI Calculator</a></li>
-        <li><a href="math_calculator.html">Math Calculator</a></li>
-        <li><a href="percentage.html">Percentage Calculator</a></li>
-        <li><a href="table_maker.html">Multiplication Table Maker</a></li>
-    </ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="age_calculator.html" class="active">Age</a></li>
+            <li><a href="BMI.html">BMI</a></li>
+            <li><a href="emi.html">EMI</a></li>
+            <li><a href="math_calculator.html">Math</a></li>
+            <li><a href="percentage.html">Percentage</a></li>
+            <li><a href="advanced_math_calculator.html">Advanced</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <a href="login.html" class="btn" style="margin-right: 10px;">Login</a>
+            <a href="signup.html" class="btn">Sign Up</a>
+            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+        </div>
     </nav>
 
     <!-- Age Calculator -->
     <div class="container">
-        <h2>Age Calculator</h2>
+        <h2>Modern Age Calculator</h2>
 
-        <label for="dob">Select Your Date of Birth:</label>
-        <input type="date" id="dob">
+        <div class="input-group">
+            <label for="birthDate">Your Date of Birth</label>
+            <input type="date" id="birthDate">
+        </div>
 
-        <label for="currentDate">Select Current Date:</label>
-        <input type="date" id="currentDate">
+        <div class="input-group">
+            <label for="todayDate">Today's Date</label>
+            <input type="date" id="todayDate">
+        </div>
 
-        <button onclick="calculateAge()">Calculate</button>
-        <button class="btn-reset" onclick="resetCalculator()">Reset</button>
+        <div class="button-group">
+            <button class="btn-calculate" onclick="calculateAge()">Calculate Age</button>
+            <button class="btn-reset" onclick="resetForm()">Reset</button>
+        </div>
 
-        <p id="result"></p>
+        <div id="result"></div>
     </div>
 
     <script>
+        document.getElementById('todayDate').valueAsDate = new Date();
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        // Load theme from local storage
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+
         function calculateAge() {
-            let dob = document.getElementById("dob").value;
-            let currentDate = document.getElementById("currentDate").value;
+            // ... (rest of the script is the same)
+            const birthDate = new Date(document.getElementById('birthDate').value);
+            const todayDate = new Date(document.getElementById('todayDate').value);
+            const resultDiv = document.getElementById('result');
 
-            if (!dob || !currentDate) {
-                document.getElementById("result").innerText = "Please select both dates.";
+            if (isNaN(birthDate)) {
+                resultDiv.innerHTML = '<p style="color: red;">Please enter a valid date of birth.</p>';
                 return;
             }
 
-            let dobDate = new Date(dob);
-            let selectedDate = new Date(currentDate);
-
-            if (dobDate > selectedDate) {
-                document.getElementById("result").innerText = "DOB cannot be greater than the selected date.";
+            if (birthDate > todayDate) {
+                resultDiv.innerHTML = '<p style="color: red;">Birth date cannot be in the future.</p>';
                 return;
             }
 
-            let years = selectedDate.getFullYear() - dobDate.getFullYear();
-            let months = selectedDate.getMonth() - dobDate.getMonth();
-            let days = selectedDate.getDate() - dobDate.getDate();
+            let years = todayDate.getFullYear() - birthDate.getFullYear();
+            let months = todayDate.getMonth() - birthDate.getMonth();
+            let days = todayDate.getDate() - birthDate.getDate();
 
             if (days < 0) {
-                months -= 1;
-                days += new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 0).getDate();
+                months--;
+                const lastMonth = new Date(todayDate.getFullYear(), todayDate.getMonth(), 0);
+                days += lastMonth.getDate();
             }
+
             if (months < 0) {
-                years -= 1;
+                years--;
                 months += 12;
             }
 
-            document.getElementById("result").innerText = `You are ${years} years, ${months} months, and ${days} days old.`;
+            const totalDays = Math.floor((todayDate - birthDate) / (1000 * 60 * 60 * 24));
+            const totalHours = totalDays * 24;
+            const totalMinutes = totalHours * 60;
+            const totalSeconds = totalMinutes * 60;
+
+            resultDiv.innerHTML = `
+                <p><strong>Age:</strong> ${years} years, ${months} months, ${days} days</p>
+                <hr>
+                <p><strong>Total Days:</strong> ${totalDays.toLocaleString()}</p>
+                <p><strong>Total Hours:</strong> ${totalHours.toLocaleString()}</p>
+                <p><strong>Total Minutes:</strong> ${totalMinutes.toLocaleString()}</p>
+                <p><strong>Total Seconds:</strong> ${totalSeconds.toLocaleString()}</p>
+            `;
         }
 
-        function resetCalculator() {
-            document.getElementById("dob").value = "";
-            document.getElementById("currentDate").value = "";
-            document.getElementById("result").innerText = "";
-        }
-
-        function toggleMenu() {
-            document.querySelector("nav ul").classList.toggle("active");
+        function resetForm() {
+            document.getElementById('birthDate').value = '';
+            document.getElementById('todayDate').valueAsDate = new Date();
+            document.getElementById('result').innerHTML = '';
         }
     </script>
 

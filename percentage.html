@@ -4,238 +4,296 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Percentage Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #6f42c1;
+            --primary-hover-color: #5a3d9a;
+            --secondary-color: #6c757d;
+            --success-color: #20c997;
+            --success-hover-color: #1ba982;
+            --danger-color: #dc3545;
+            --light-bg: #f8f9fa;
+            --dark-bg: #1a1a1a;
+            --light-container-bg: #ffffff;
+            --dark-container-bg: #2c2c2c;
+            --light-text: #343a40;
+            --dark-text: #f8f9fa;
+            --light-border: #ccc;
+            --dark-border: #555;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
+
         body {
-            background: #1e1e2f; /* Dark Background */
+            background: var(--light-bg);
+            color: var(--light-text);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding-top: 60px; /* Prevent content from hiding behind navbar */
+            padding-top: 80px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: var(--dark-text);
         }
 
         /* Navbar */
         nav {
             background: #222;
-            padding: 15px 20px;
+            padding: 1rem 2rem;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             position: fixed;
             top: 0;
             left: 0;
             z-index: 1000;
         }
+        
+        nav a.logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
         nav ul {
             list-style: none;
             display: flex;
+            gap: 20px;
         }
-        nav ul li {
-            margin: 0 15px;
-        }
-        nav ul li a {
+
+        nav a {
             color: white;
             text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
-            transition: 0.3s;
-        }
-        nav ul li a:hover, nav ul li a.active {
-            background: #ff9800;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
             border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(255, 152, 0, 0.5);
+            transition: background-color 0.3s;
         }
 
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
+        nav ul a:hover, nav ul a.active {
+            background-color: var(--primary-hover-color);
+        }
+        
+        .theme-toggle {
             cursor: pointer;
-        }
-        .menu-toggle div {
-            width: 30px;
-            height: 4px;
-            background: white;
-            margin: 5px 0;
-            transition: 0.4s;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            margin-left: 15px;
         }
 
-        /* Responsive Navbar */
-        @media screen and (max-width: 768px) {
-            nav ul {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 55px;
-                left: 0;
-                width: 100%;
-                background: #222;
-                text-align: center;
-                padding: 10px 0;
-            }
-            nav ul.active {
-                display: flex;
-            }
-            nav ul li {
-                margin: 10px 0;
-            }
-            .menu-toggle {
-                display: flex;
-            }
+        .nav-buttons {
+            display: flex;
+            align-items: center;
         }
 
         /* Container */
         .container {
-            background: #fff;
-            padding: 25px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
+            background: var(--light-container-bg);
+            color: var(--light-text);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 90%;
-            max-width: 400px;
-            text-align: center;
+            max-width: 600px;
             margin-top: 20px;
+            transition: background 0.3s, color 0.3s;
         }
+
+        body.dark-mode .container {
+            background: var(--dark-container-bg);
+            color: var(--dark-text);
+        }
+
         h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 22px;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
         }
+
+        .calculator {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--light-border);
+            border-radius: 8px;
+        }
+        body.dark-mode .calculator {
+            border-color: var(--dark-border);
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
         label {
-            font-size: 16px;
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
+            font-weight: 500;
+            color: var(--secondary-color);
         }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
+
+        input[type="number"] {
+            padding: 0.8rem;
+            border: 1px solid var(--light-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--light-bg);
+            color: var(--light-text);
+            transition: all 0.3s;
+            width: 100px;
         }
+        
+        body.dark-mode input[type="number"] {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+        
         button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
+            padding: 0.8rem 1.2rem;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s;
+            background-color: var(--success-color);
+            color: white;
         }
-        .btn-calculate { background: #28a745; color: white; }
-        .btn-calculate:hover { background: #218838; }
-        .btn-reset { background: #dc3545; color: white; }
-        .btn-reset:hover { background: #c82333; }
-        #result {
-            font-weight: bold;
-            color: #333;
-            margin-top: 20px;
-            font-size: 18px;
+        
+        button:hover {
+            background-color: var(--success-hover-color);
         }
+
+        .result-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border: 1px solid var(--light-border);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        body.dark-mode .result-box {
+            background-color: var(--dark-bg);
+            border-color: var(--dark-border);
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav>
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+        <a href="index.html" class="logo">Smart Calculators</a>
         <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="age_calculator.html">Age Calculator</a></li>
-        <li><a href="BMI.html">BMI Calculator</a></li>
-        <li><a href="emi.html">EMI Calculator</a></li>
-        <li><a href="math_calculator.html">Math Calculator</a></li>
-        <li><a href="percentage.html">Percentage Calculator</a></li>
-        <li><a href="table_maker.html">Multiplication Table Maker</a></li>
-    </ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="age_calculator.html">Age</a></li>
+            <li><a href="BMI.html">BMI</a></li>
+            <li><a href="emi.html">EMI</a></li>
+            <li><a href="math_calculator.html">Math</a></li>
+            <li><a href="percentage.html" class="active">Percentage</a></li>
+            <li><a href="advanced_math_calculator.html">Advanced</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <a href="login.html" class="btn" style="margin-right: 10px;">Login</a>
+            <a href="signup.html" class="btn">Sign Up</a>
+            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+        </div>
     </nav>
 
-    <!-- Calculator -->
     <div class="container">
         <h2>Percentage Calculator</h2>
+        
+        <div class="calculator">
+            <div class="input-group">
+                <label>What is</label>
+                <input type="number" id="p1" placeholder="%">
+                <label>of</label>
+                <input type="number" id="n1" placeholder="value">
+                <button onclick="calc1()">Calculate</button>
+            </div>
+            <div id="res1" class="result-box">Result</div>
+        </div>
 
-        <label for="calcType">Select Calculation Type:</label>
-        <select id="calcType" onchange="updateFields()">
-            <option value="percentageOf">Find X% of Y</option>
-            <option value="whatPercentage">Find what % X is of Y</option>
-            <option value="percentageChange">Find % increase/decrease</option>
-        </select>
+        <div class="calculator">
+            <div class="input-group">
+                 <input type="number" id="x2" placeholder="value">
+                <label>is what percent of</label>
+                <input type="number" id="y2" placeholder="value">
+                <button onclick="calc2()">Calculate</button>
+            </div>
+            <div id="res2" class="result-box">Result</div>
+        </div>
 
-        <label for="num1" id="label1">Enter X (%):</label>
-        <input type="number" id="num1" placeholder="Enter first number" oninput="calculatePercentage()">
+        <div class="calculator">
+             <div class="input-group">
+                <label>From</label>
+                <input type="number" id="v1" placeholder="initial">
+                <label>to</label>
+                <input type="number" id="v2" placeholder="final">
+                <button onclick="calc3()">Calculate</button>
+            </div>
+            <div id="res3" class="result-box">Result</div>
+        </div>
 
-        <label for="num2" id="label2">Enter Y:</label>
-        <input type="number" id="num2" placeholder="Enter second number" oninput="calculatePercentage()">
-
-        <button class="btn-reset" onclick="resetCalculator()">Reset</button>
-
-        <p id="result"></p>
     </div>
 
     <script>
-        function updateFields() {
-            let calcType = document.getElementById("calcType").value;
-            let label1 = document.getElementById("label1");
-            let label2 = document.getElementById("label2");
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
 
-            if (calcType === "percentageOf") {
-                label1.innerText = "Enter X (%):";
-                label2.innerText = "Enter Y:";
-            } else if (calcType === "whatPercentage") {
-                label1.innerText = "Enter X:";
-                label2.innerText = "Enter Y:";
-            } else if (calcType === "percentageChange") {
-                label1.innerText = "Initial Value:";
-                label2.innerText = "Final Value:";
-            }
-            calculatePercentage();
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
 
-        function calculatePercentage() {
-            let calcType = document.getElementById("calcType").value;
-            let num1 = parseFloat(document.getElementById("num1").value);
-            let num2 = parseFloat(document.getElementById("num2").value);
-            let result = "";
-
-            if (isNaN(num1) || isNaN(num2) || num2 === 0) {
-                document.getElementById("result").innerText = "";
-                return;
-            }
-
-            if (calcType === "percentageOf") {
-                result = (num1 / 100) * num2;
-                document.getElementById("result").innerText = `${num1}% of ${num2} is ${result}`;
-            } else if (calcType === "whatPercentage") {
-                result = (num1 / num2) * 100;
-                document.getElementById("result").innerText = `${num1} is ${result.toFixed(2)}% of ${num2}`;
-            } else if (calcType === "percentageChange") {
-                result = ((num2 - num1) / num1) * 100;
-                document.getElementById("result").innerText = `Percentage change: ${Math.abs(result).toFixed(2)}%`;
-            }
+        function calc1() {
+            const p = document.getElementById('p1').value;
+            const n = document.getElementById('n1').value;
+            if (!p || !n) return;
+            document.getElementById('res1').innerText = (p / 100) * n;
         }
 
-        function resetCalculator() {
-            document.getElementById("num1").value = "";
-            document.getElementById("num2").value = "";
-            document.getElementById("result").innerText = "";
+        function calc2() {
+            const x = document.getElementById('x2').value;
+            const y = document.getElementById('y2').value;
+            if (!x || !y) return;
+            document.getElementById('res2').innerText = ((x / y) * 100).toFixed(2) + '%';
         }
 
-        function toggleMenu() {
-            document.querySelector("nav ul").classList.toggle("active");
+        function calc3() {
+            const v1 = document.getElementById('v1').value;
+            const v2 = document.getElementById('v2').value;
+            if (!v1 || !v2) return;
+            const change = ((v2 - v1) / v1) * 100;
+            document.getElementById('res3').innerText = (change > 0 ? '+' : '') + change.toFixed(2) + '%';
         }
     </script>
 

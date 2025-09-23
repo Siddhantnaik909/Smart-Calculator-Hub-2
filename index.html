@@ -8,341 +8,290 @@
     <title>Smart Calculator Hub</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6f42c1;
+            --primary-hover-color: #5a3d9a;
+            --secondary-color: #6c757d;
+            --success-color: #20c997;
+            --success-hover-color: #1ba982;
+            --light-bg: #f8f9fa;
+            --dark-bg: #1a1a1a;
+            --light-container-bg: #ffffff;
+            --dark-container-bg: #2c2c2c;
+            --light-text: #343a40;
+            --dark-text: #f8f9fa;
+        }
+
         * {
-            margin: auto;
+            margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
-            transition: background 0.4s, color 0.3s; /* Smooth transition for background and text color */
+            font-family: 'Roboto', sans-serif;
         }
 
         body {
-            background: #f4f4f4; /* Light gray background */
-            color: #333333; /* Dark text color */
+            background: var(--light-bg);
+            color: var(--light-text);
             text-align: center;
+            transition: background 0.3s, color 0.3s;
         }
 
-        /* Dark Theme Styles */
-        body.dark {
-            background: #121212; /* Dark background */
-            color: #ffffff; /* White text */
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: var(--dark-text);
         }
 
         /* Navbar */
-        .navbar {
+        nav {
+            background: #222;
+            padding: 1rem 2rem;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #000000; /* Dark black */
-            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             position: fixed;
-            width: 100%;
             top: 0;
+            left: 0;
             z-index: 1000;
         }
-
-        .logo a {
-            font-size: 25px;
-            font-weight: bold;
+        
+        nav a.logo {
+            color: white;
             text-decoration: none;
-            color: #ffffff; /* White */
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        .nav-links {
+        nav ul {
             list-style: none;
             display: flex;
+            gap: 20px;
         }
 
-        .nav-links li {
-            margin: 10px 10px;
-        }
-
-        .nav-links a {
+        nav a {
+            color: white;
             text-decoration: none;
-            color: #ffffff; /* White */
-            padding: 8px 12px;
-            transition: 0.3s;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
 
-        .nav-links a:hover {
-            background: #ff9800; /* Bright orange */
-            border-radius: 10px;
+        nav ul a:hover {
+            background-color: var(--primary-hover-color);
+        }
+        
+        .theme-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
         }
 
         /* Hero Section */
         .hero {
-            margin-top: 150px;
-            padding: 60px;
-            background: #ffffff; /* White */
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            transition: background 0.3s; /* Smooth transition for background */
+            margin-top: 120px;
+            padding: 4rem 2rem;
+            background: var(--light-container-bg);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
         }
 
-        .hero.dark {
-            background: #333333; /* Dark gray */
-            color: #ffffff; /* White text for dark mode */
+        body.dark-mode .hero {
+            background: var(--dark-container-bg);
         }
 
         .hero h1 {
-            font-size: 28px;
-            color: #333333; /* Dark gray */
-        }
-
-        .hero.dark h1 {
-            color: #ffffff; /* White text for dark mode */
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
         }
 
         .hero p {
-            font-size: 16px;
-            margin-top: 10px;
-            color: #555555; /* Medium gray */
-        }
-
-        .hero.dark p {
-            color: #dddddd; /* Light gray for better visibility in dark mode */
+            font-size: 1.2rem;
+            color: var(--secondary-color);
         }
 
         /* Calculator List */
         .calculator-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .calculator-card {
-            background: #ffffff; /* White */
-            width: 300px;
-            padding: 20px;
-            margin: 15px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            transition: background 0.3s; /* Smooth transition for background */
+            background: var(--light-container-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode .calculator-card {
+            background: var(--dark-container-bg);
         }
 
-        .calculator-card.dark {
-            background: #444444; /* Dark gray */
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
         .calculator-card h2 {
-            color: #ff9800; /* Bright orange */
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .calculator-card p {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
         }
 
         .btn {
             display: inline-block;
-            padding: 10px;
-            margin-top: 10px;
+            padding: 0.8rem 1.5rem;
             color: white;
-            background: #ff9800; /* Bright orange */
+            background: var(--success-color);
             text-decoration: none;
-            border-radius: 5px;
-            transition: 0.3s;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.3s;
         }
 
         .btn:hover {
-            background: #e68a00; /* Darker orange */
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                background: #333333; /* Dark gray */
-                position: absolute;
-                width: 100%;
-                top: 60px;
-                left: 0;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .menu-toggle {
-                display: flex;
-            }
+            background: var(--success-hover-color);
         }
 
         /* Footer */
         footer {
-            background-color: #222222; /* Dark gray */
+            background-color: #222;
             text-align: center;
-            padding: 10px;
-            position: relative;
+            padding: 2rem 1rem;
+            color: #aaa;
         }
 
         .social-link {
-            margin: 0 15px;
+            margin: 0 1rem;
             text-decoration: none;
-            color: #007BFF; /* Light blue */
-            font-size: 24px; /* Adjust icon size */
+            color: var(--success-color);
+            font-size: 1.8rem;
         }
 
         .social-link:hover {
-            color: #0056b3; /* Darker blue on hover */
+            color: var(--success-hover-color);
         }
 
         .copyright-text {
-            font-size: 14px; /* Adjust the font size as needed */
-            color: #ffffff; /* White */
-            margin-top: 10px; /* Add some space above the copyright text */
+            font-size: 0.9rem;
+            margin-top: 1rem;
         }
 
-        /* Theme Toggle Button */
-        .theme-toggle {
-            cursor: pointer;
-            background: transparent; /* Transparent background */
-            border: none; /* No border */
-            color: #ffffff; /* White */
-            font-size: 24px; /* Icon size */
-            transition: color 0.3s; /* Smooth transition for color */
-        }
-
-        .theme-toggle:hover {
-            color: #ff9800; /* Change color on hover */
-        }
     </style>
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">
-            <a href="index.html">Smart Calculator Hub</a>
-        </div>
-
-        <!-- Theme Toggle Button with Icons -->
-        <button class="theme-toggle" onclick="toggleTheme()">
-            <i class="fas fa-sun" id="theme-icon"></i> <!-- Sun icon for light theme -->
-        </button>
-
-        <!-- Hamburger Menu -->
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-
+    <nav>
+        <a href="index.html" class="logo">Smart Calculators</a>
         <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="age_calculator.html">Age Calculator</a></li>
-            <li><a href="BMI.html">BMI Calculator</a></li>
-            <li><a href="emi.html">EMI Calculator</a></li>
-            <li><a href="math_calculator.html">Math Calculator</a></li>
-            <li><a href="percentage.html">Percentage Calculator</a></li>
-            <li><a href="table_maker.html">Multiplication Table Maker</a></li>
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="age_calculator.html">Age</a></li>
+            <li><a href="BMI.html">BMI</a></li>
+            <li><a href="emi.html">EMI</a></li>
+            <li><a href="math_calculator.html">Math</a></li>
+            <li><a href="percentage.html">Percentage</a></li>
+            <li><a href="advanced_math_calculator.html">Advanced</a></li>
         </ul>
+        <div class="nav-buttons">
+            <a href="login.html" class="btn" style="margin-right: 10px;">Login</a>
+            <a href="signup.html" class="btn">Sign Up</a>
+            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+        </div>
     </nav>
 
     <!-- Main Content -->
     <header class="hero">
         <h1>Welcome to Smart Calculator Hub</h1>
-        <p>Your one-stop destination for essential calculators.</p>
+        <p>Your one-stop destination for a suite of modern, easy-to-use calculators.</p>
+        <a href="https://siddhantnaik909.github.io/siddhant-naik-portfolio/" class="btn" style="margin-top: 20px;">View My Portfolio</a>
     </header>
 
     <section class="calculator-list">
         <div class="calculator-card">
             <h2>Age Calculator</h2>
-            <p>Calculate your exact age in years, months, and days.</p>
-            <a href="age_calculator.html" class="btn">Try Now</a>
+            <p>Calculate your exact age in years, months, days, and even seconds. A simple tool for a timeless question.</p>
+            <a href="age_calculator.html" class="btn">Calculate Age</a>
         </div>
 
         <div class="calculator-card">
             <h2>BMI Calculator</h2>
-            <p>Find out if you're in a healthy weight range.</p>
-            <a href="BMI.html" class="btn">Try Now</a>
+            <p>Check your Body Mass Index (BMI) with our visual and intuitive calculator. Track your health journey.</p>
+            <a href="BMI.html" class="btn">Check BMI</a>
         </div>
 
         <div class="calculator-card">
             <h2>EMI Calculator</h2>
-            <p>Plan your loan payments effectively.</p>
-            <a href="emi.html" class="btn">Try Now</a>
+            <p>Plan your finances with our Equated Monthly Installment (EMI) calculator. Perfect for loans and mortgages.</p>
+            <a href="emi.html" class="btn">Calculate EMI</a>
         </div>
 
         <div class="calculator-card">
             <h2>Math Calculator</h2>
-            <p>Perform advanced math operations with ease.</p>
-            <a href="math_calculator.html" class="btn">Try Now</a>
+            <p>From basic arithmetic to more complex operations, our math calculator is ready for your calculations.</p>
+            <a href="math_calculator.html" class="btn">Do Math</a>
         </div>
 
         <div class="calculator-card">
             <h2>Percentage Calculator</h2>
-            <p>Quickly calculate percentage values.</p>
-            <a href="percentage.html" class="btn">Try Now</a>
+            <p>Effortlessly solve various percentage problems, from simple discounts to complex financial analysis.</p>
+            <a href="percentage.html" class="btn">Calc Percent</a>
         </div>
 
         <div class="calculator-card">
-            <h2>Multiplication Table Maker</h2>
-            <p>Generate multiplication tables dynamically.</p>
-            <a href="table_maker.html" class="btn">Try Now</a>
+            <h2>Advanced Math Calculator</h2>
+            <p>Perform scientific calculations with ease, including trigonometric functions, logarithms, and more.</p>
+            <a href="advanced_math_calculator.html" class="btn">Advanced Math</a>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <a href="https://wa.me/919137467516" class="social-link" target="_blank" title="Message Siddhant Naik on WhatsApp">
-            <i class="fab fa-whatsapp"></i>
-        </a>
-        <a href="https://www.instagram.com/siddhantnaik909?igsh=bWp6Ym54Nzh2a3Ux" class="social-link" target="_blank" title="Follow Siddhant Naik on Instagram">
-            <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://github.com/Siddhantnaik909" class="social-link" target="_blank" title="View Siddhant Naik's GitHub">
-            <i class="fab fa-github"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/siddhant-naik-349170333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link" target="_blank" title="Connect with Siddhant Naik on LinkedIn">
-            <i class="fab fa-linkedin"></i>
-        </a>
-        <p class="copyright-text">&copy; 2025 Smart Calculator Hub. All rights reserved.</p>
+        <div>
+            <a href="https://wa.me/919137467516" class="social-link" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.instagram.com/siddhantnaik909?igsh=bWp6Ym54Nzh2a3Ux" class="social-link" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://github.com/Siddhantnaik909" class="social-link" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/siddhant-naik-349170333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <p class="copyright-text">&copy; 2025 Smart Calculator Hub. Designed by Siddhant Naik.</p>
     </footer>
 
     <script>
-        function toggleMenu() {
-            let navLinks = document.querySelector(".nav-links");
-            navLinks.classList.toggle("active");
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
 
-            // Animate Hamburger Icon
-            let menuToggle = document.querySelector(".menu-toggle");
-            menuToggle.classList.toggle("open");
-
-            // Animate lines
-            let lines = menuToggle.querySelectorAll("div");
-            if (menuToggle.classList.contains("open")) {
-                lines[0].style.transform = "rotate(45deg) translate(5px, 5px)";
-                lines[1].style.opacity = "0";
-                lines[2].style.transform = "rotate(-45deg) translate(5px, -5px)";
-            } else {
-                lines[0].style.transform = "rotate(0)";
-                lines[1].style.opacity = "1";
-                lines[2].style.transform = "rotate(0)";
-            }
-        }
-
-        // Close menu when a link is clicked
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector(".nav-links").classList.remove("active");
-                document.querySelector(".menu-toggle").classList.remove("open");
-            });
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         });
 
-        // Theme toggle function
-        function toggleTheme() {
-            document.body.classList.toggle("dark");
-            document.querySelectorAll('.hero, .calculator-card').forEach(element => {
-                element.classList.toggle("dark");
-            });
-
-            // Change icon based on theme
-            const themeIcon = document.getElementById("theme-icon");
-            if (document.body.classList.contains("dark")) {
-                themeIcon.classList.remove("fa-sun");
-                themeIcon.classList.add("fa-moon"); // Moon icon for dark theme
-            } else {
-                themeIcon.classList.remove("fa-moon");
-                themeIcon.classList.add("fa-sun"); // Sun icon for light theme
-            }
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
     </script>
 

@@ -4,264 +4,337 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #6f42c1;
+            --primary-hover-color: #5a3d9a;
+            --secondary-color: #6c757d;
+            --success-color: #20c997;
+            --success-hover-color: #1ba982;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-bg: #f8f9fa;
+            --dark-bg: #1a1a1a;
+            --light-container-bg: #ffffff;
+            --dark-container-bg: #2c2c2c;
+            --light-text: #343a40;
+            --dark-text: #f8f9fa;
+            --light-border: #ccc;
+            --dark-border: #555;
+            --operator-bg: #6f42c1; /* Primary color */
+            --operator-hover-bg: #5a3d9a;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
+
         body {
-            background: #1e1e2f;
-            color: white;
+            background: var(--light-bg);
+            color: var(--light-text);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding-top: 60px;
+            padding-top: 80px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: var(--dark-text);
         }
 
         /* Navbar */
         nav {
             background: #222;
-            padding: 15px 20px;
+            padding: 1rem 2rem;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             position: fixed;
             top: 0;
             left: 0;
             z-index: 1000;
         }
         
+        nav a.logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
         nav ul {
             list-style: none;
             display: flex;
+            gap: 20px;
         }
 
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
+        nav a {
             color: white;
             text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
-            transition: 0.3s;
-        }
-
-        nav ul li a:hover {
-            background: #ff9800;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
             border-radius: 5px;
+            transition: background-color 0.3s;
         }
 
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
+        nav ul a:hover, nav ul a.active {
+            background-color: var(--primary-hover-color);
+        }
+        
+        .theme-toggle {
             cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            margin-left: 15px;
         }
 
-        .menu-toggle div {
-            width: 30px;
-            height: 4px;
-            background: white;
-            margin: 5px 0;
-            transition: 0.4s;
+        .nav-buttons {
+            display: flex;
+            align-items: center;
         }
 
-        /* Responsive Navbar */
-        @media screen and (max-width: 768px) {
-            .menu-toggle {
-                display: flex;
-            }
-
-            nav ul {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 55px;
-                left: 0;
-                width: 100%;
-                background: #222;
-                text-align: center;
-                padding: 10px 0;
-            }
-
-            nav ul.active {
-                display: flex;
-            }
-
-            nav ul li {
-                margin: 10px 0;
-            }
-        }
-
-        /* Calculator */
+        /* Calculator Container */
         .container {
-            background: black;
-            padding: 25px;
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            background: var(--light-container-bg);
+            color: var(--light-text);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 90%;
-            max-width: 320px;
-            text-align: center;
+            max-width: 400px;
             margin-top: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .container {
+            background: var(--dark-container-bg);
+            color: var(--dark-text);
         }
 
         #display {
             width: 100%;
-            height: 50px;
-            font-size: 24px;
+            padding: 1rem 1.5rem;
+            font-size: 2.8rem;
             text-align: right;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: none;
-            background: #222;
-            color: white;
-            border-radius: 5px;
+            border: 1px solid var(--light-border);
+            border-radius: 8px;
+            background: var(--light-bg);
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            word-wrap: break-word;
+            word-break: break-all;
         }
 
-        .dial-pad {
+        body.dark-mode #display {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+
+        .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 10px;
+            gap: 1rem;
         }
 
-        .dial-pad button {
-            padding: 15px;
-            font-size: 20px;
+        button {
+            padding: 1.2rem;
+            font-size: 1.5rem;
             border: none;
-            background: #333;
-            color: white;
-            border-radius: 50px;
+            border-radius: 8px;
             cursor: pointer;
-            width: 60px;
-            height: 60px;
+            background: var(--light-bg);
+            color: var(--light-text);
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode button {
+             background: var(--dark-container-bg);
+             color: var(--dark-text);
+             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        .dial-pad button:nth-child(4n) {
-            background: #555;
+        button:hover {
+            transform: translateY(-2px);
         }
 
-        .dial-pad button:last-child {
-            background: #5a75ff;
+        .operator {
+            background: var(--operator-bg);
             color: white;
         }
+        .operator:hover {
+             background: var(--operator-hover-bg);
+        }
+
+        .equal {
+            background: var(--success-color);
+            color: white;
+            grid-column: span 2;
+        }
+        .equal:hover {
+            background: var(--success-hover-color);
+        }
+
+        .ac {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        .ac:hover {
+            background-color: #c82333;
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav>
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
+        <a href="index.html" class="logo">Smart Calculators</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="age_calculator.html">Age</a></li>
+            <li><a href="BMI.html">BMI</a></li>
+            <li><a href="emi.html">EMI</a></li>
+            <li><a href="math_calculator.html" class="active">Math</a></li>
+            <li><a href="percentage.html">Percentage</a></li>
+            <li><a href="advanced_math_calculator.html">Advanced</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <a href="login.html" class="btn" style="margin-right: 10px;">Login</a>
+            <a href="signup.html" class="btn">Sign Up</a>
+            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
         </div>
-       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="age_calculator.html">Age Calculator</a></li>
-        <li><a href="BMI.html">BMI Calculator</a></li>
-        <li><a href="emi.html">EMI Calculator</a></li>
-        <li><a href="math_calculator.html">Math Calculator</a></li>
-        <li><a href="percentage.html">Percentage Calculator</a></li>
-        <li><a href="table_maker.html">Multiplication Table Maker</a></li>
-    </ul>
     </nav>
 
-    <!-- Calculator -->
     <div class="container">
-        <input type="text" id="display" disabled>
-        
-        <div class="dial-pad">
-            <button onclick="clearDisplay()">AC</button>
-            <button onclick="backspace()">⌫</button>
-            <button onclick="toggleSign()">+/-</button>
-            <button onclick="appendValue('/')">÷</button>
+        <div id="display">0</div>
+        <div class="buttons">
+            <button class="ac" onclick="clearDisplay()">AC</button>
+            <button class="operator" onclick="backspace()"><i class="fas fa-backspace"></i></button>
+            <button class="operator" onclick="appendOperator('%')">%</button>
+            <button class="operator" onclick="appendOperator('/')">÷</button>
 
-            <button onclick="appendValue('7')">7</button>
-            <button onclick="appendValue('8')">8</button>
-            <button onclick="appendValue('9')">9</button>
-            <button onclick="appendValue('*')">×</button>
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="appendOperator('*')">×</button>
 
-            <button onclick="appendValue('4')">4</button>
-            <button onclick="appendValue('5')">5</button>
-            <button onclick="appendValue('6')">6</button>
-            <button onclick="appendValue('-')">-</button>
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="appendOperator('-')">-</button>
 
-            <button onclick="appendValue('1')">1</button>
-            <button onclick="appendValue('2')">2</button>
-            <button onclick="appendValue('3')">3</button>
-            <button onclick="appendValue('+')">+</button>
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
 
-            <button onclick="appendValue('%')">%</button>
-            <button onclick="appendValue('0')">0</button>
-            <button onclick="appendValue('.')">.</button>
-            <button onclick="calculateResult()">=</button>
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendDot()">.</button>
+            <button class="equal" onclick="calculateResult()">=</button>
         </div>
     </div>
 
     <script>
-        function toggleMenu() {
-            document.querySelector("nav ul").classList.toggle("active");
-        }
+        const display = document.getElementById('display');
+        let currentOperand = '';
+        let previousOperand = '';
+        let operation = undefined;
 
-        function appendValue(value) {
-            let display = document.getElementById("display");
-            let currentValue = display.value;
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
 
-            if ("+-*/%".includes(value) && "+-*/%".includes(currentValue.slice(-1))) {
-                return;
-            }
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
 
-            if (currentValue === "" && "+*/%".includes(value)) {
-                return;
-            }
-
-            let parts = currentValue.split(/[\+\-\*\/\%]/);
-            let lastPart = parts[parts.length - 1];
-            if (value === "." && lastPart.includes(".")) {
-                return;
-            }
-
-            display.value += value;
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
 
         function clearDisplay() {
-            document.getElementById("display").value = "";
+            currentOperand = '';
+            previousOperand = '';
+            operation = undefined;
+            updateDisplay('0');
         }
 
         function backspace() {
-            let display = document.getElementById("display");
-            display.value = display.value.slice(0, -1);
+            currentOperand = currentOperand.toString().slice(0, -1);
+            updateDisplay();
         }
 
-        function toggleSign() {
-            let display = document.getElementById("display");
-            if (display.value && !"+-*/%".includes(display.value.slice(-1))) {
-                display.value = display.value.startsWith("-") ? display.value.slice(1) : "-" + display.value;
+        function appendNumber(number) {
+            if (number === '.' && currentOperand.includes('.')) return;
+            currentOperand = currentOperand.toString() + number.toString();
+            updateDisplay();
+        }
+        
+        function appendDot() {
+            if (currentOperand.includes('.')) return;
+            if (currentOperand === '') {
+                currentOperand = '0';
             }
+            currentOperand += '.';
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (currentOperand === '' && op !== '-') return; // Allow starting with a negative number
+            if (previousOperand !== '') {
+                calculateResult();
+            }
+            operation = op;
+            previousOperand = currentOperand;
+            currentOperand = '';
         }
 
         function calculateResult() {
-            let display = document.getElementById("display").value;
-            if ("+-*/%".includes(display.slice(-1))) {
-                return;
-            }
+            let computation;
+            const prev = parseFloat(previousOperand);
+            const current = parseFloat(currentOperand);
+            if (isNaN(prev) || isNaN(current)) return;
 
-            try {
-                let result = eval(display);
-                document.getElementById("display").value = result;
-            } catch {
-                document.getElementById("display").value = "Error";
+            switch (operation) {
+                case '+': computation = prev + current; break;
+                case '-': computation = prev - current; break;
+                case '*': computation = prev * current; break;
+                case '/': computation = prev / current; break;
+                case '%': computation = prev % current; break;
+                default: return;
             }
+            currentOperand = computation;
+            operation = undefined;
+            previousOperand = '';
+            updateDisplay();
         }
+
+        function updateDisplay(value) {
+            let stringValue = (value !== undefined ? value : currentOperand).toString();
+            if (stringValue.length > 12) {
+                stringValue = parseFloat(stringValue).toExponential(5);
+            }
+            display.innerText = stringValue || '0';
+        }
+
     </script>
 
 </body>
-    </html>
+</html>

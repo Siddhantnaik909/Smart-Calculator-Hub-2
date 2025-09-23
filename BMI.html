@@ -4,228 +4,490 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BMI Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #6f42c1;
+            --primary-hover-color: #5a3d9a;
+            --secondary-color: #6c757d;
+            --success-color: #20c997;
+            --success-hover-color: #1ba982;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --light-bg: #f8f9fa;
+            --dark-bg: #1a1a1a;
+            --light-container-bg: #ffffff;
+            --dark-container-bg: #2c2c2c;
+            --light-text: #343a40;
+            --dark-text: #f8f9fa;
+            --light-border: #ccc;
+            --dark-border: #555;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
+
         body {
-            background: #1e1e2f; /* Dark Background */
+            background: var(--light-bg);
+            color: var(--light-text);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding-top: 60px; /* Prevent content from hiding behind navbar */
+            padding-top: 80px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: var(--dark-text);
         }
 
         /* Navbar */
         nav {
             background: #222;
-            padding: 15px 20px;
+            padding: 1rem 2rem;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             position: fixed;
             top: 0;
             left: 0;
             z-index: 1000;
         }
+        
+        nav a.logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
         nav ul {
             list-style: none;
             display: flex;
+            gap: 20px;
         }
-        nav ul li {
-            margin: 0 15px;
-        }
-        nav ul li a {
+
+        nav a {
             color: white;
             text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
-            transition: 0.3s;
-        }
-        nav ul li a:hover, nav ul li a.active {
-            background: #ff9800;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
             border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(255, 152, 0, 0.5);
+            transition: background-color 0.3s;
         }
 
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
+        nav ul a:hover, nav ul a.active {
+            background-color: var(--primary-hover-color);
+        }
+        
+        .theme-toggle {
             cursor: pointer;
-        }
-        .menu-toggle div {
-            width: 30px;
-            height: 4px;
-            background: white;
-            margin: 5px 0;
-            transition: 0.4s;
-        }
-
-        /* Responsive Navbar */
-        @media screen and (max-width: 768px) {
-            nav ul {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 55px;
-                left: 0;
-                width: 100%;
-                background: #222;
-                text-align: center;
-                padding: 10px 0;
-            }
-            nav ul.active {
-                display: flex;
-            }
-            nav ul li {
-                margin: 10px 0;
-            }
-            .menu-toggle {
-                display: flex;
-            }
-        }
-
-        /* Container */
-        .container {
-            background: #fff;
-            padding: 25px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 22px;
-        }
-        label {
-            font-size: 16px;
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
+            background: none;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            color: white;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Calculator and History Container */
+        .calculator-container, .history-container {
+            background: var(--light-container-bg);
+            color: var(--light-text);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .calculator-container, body.dark-mode .history-container {
+            background: var(--dark-container-bg);
+            color: var(--dark-text);
+        }
+
+        h2 {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid var(--light-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--light-bg);
+            color: var(--light-text);
+            transition: all 0.3s;
+        }
+
+        body.dark-mode input[type="number"], body.dark-mode select {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(111, 66, 193, 0.5);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 0.9rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s;
         }
-        .btn-calculate { background: #28a745; color: white; }
-        .btn-calculate:hover { background: #218838; }
-        .btn-reset { background: #dc3545; color: white; }
-        .btn-reset:hover { background: #c82333; }
+
+        .btn-calculate {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-calculate:hover {
+            background-color: var(--success-hover-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .btn-clear-history {
+            background-color: var(--warning-color);
+            color: #212529;
+            grid-column: 1 / -1;
+        }
+        
+        .btn-clear-history:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
         #result {
-            font-weight: bold;
-            color: #333;
-            margin-top: 20px;
-            font-size: 18px;
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 8px;
         }
+        
+        body.dark-mode #result {
+            background: var(--dark-bg);
+        }
+
+        /* BMI Chart */
+        .bmi-chart {
+            margin-top: 2rem;
+        }
+
+        .chart-bar {
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-indicator {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background-color: var(--danger-color);
+            transform: translateX(-50%);
+            transition: left 0.5s ease;
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        /* History Table */
+        .history-table {
+            width: 100%;
+            margin-top: 1.5rem;
+            border-collapse: collapse;
+        }
+        
+        .history-table th, .history-table td {
+            padding: 0.8rem;
+            border: 1px solid var(--light-border);
+            text-align: left;
+        }
+
+        body.dark-mode .history-table th, body.dark-mode .history-table td {
+            border-color: var(--dark-border);
+        }
+        
+        .history-table th {
+            background-color: var(--light-bg);
+            font-weight: 500;
+        }
+        body.dark-mode .history-table th {
+            background-color: var(--dark-bg);
+        }
+
     </style>
 </head>
 <body>
 
     <!-- Navbar -->
     <nav>
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+        <a href="index.html" class="logo">Smart Calculators</a>
         <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="age_calculator.html">Age Calculator</a></li>
-        <li><a href="BMI.html">BMI Calculator</a></li>
-        <li><a href="emi.html">EMI Calculator</a></li>
-        <li><a href="math_calculator.html">Math Calculator</a></li>
-        <li><a href="percentage.html">Percentage Calculator</a></li>
-        <li><a href="table_maker.html">Multiplication Table Maker</a></li>
-    </ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="age_calculator.html">Age</a></li>
+            <li><a href="BMI.html" class="active">BMI</a></li>
+            <li><a href="emi.html">EMI</a></li>
+            <li><a href="math_calculator.html">Math</a></li>
+            <li><a href="percentage.html">Percentage</a></li>
+            <li><a href="advanced_math_calculator.html">Advanced</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <a href="login.html" class="btn" style="margin-right: 10px;">Login</a>
+            <a href="signup.html" class="btn">Sign Up</a>
+            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+        </div>
     </nav>
 
-    <!-- BMI Calculator -->
-    <div class="container">
-        <h2>BMI Calculator</h2>
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- BMI Calculator -->
+        <div class="calculator-container">
+            <h2>Modern BMI Calculator</h2>
 
-        <label for="weight">Weight:</label>
-        <input type="number" id="weight" placeholder="Enter weight">
-        <select id="weightUnit">
-            <option value="kg">kg</option>
-            <option value="lbs">lbs</option>
-        </select>
+            <div class="input-group">
+                <label for="weight">Weight</label>
+                <div style="display:flex; gap:10px;">
+                    <input type="number" id="weight" placeholder="Enter weight">
+                    <select id="weightUnit">
+                        <option value="kg">kg</option>
+                        <option value="lb">lb</option>
+                    </select>
+                </div>
+            </div>
 
-        <label for="height">Height:</label>
-        <input type="number" id="height" placeholder="Enter height">
-        <select id="heightUnit">
-            <option value="m">m</option>
-            <option value="cm">cm</option>
-            <option value="in">in</option>
-        </select>
+            <div class="input-group">
+                <label for="height">Height</label>
+                 <div style="display:flex; gap:10px;">
+                    <input type="number" id="height" placeholder="Enter height">
+                    <select id="heightUnit">
+                        <option value="cm">cm</option>
+                        <option value="in">in</option>
+                        <option value="m">m</option>
+                    </select>
+                </div>
+            </div>
 
-        <button class="btn-calculate" onclick="calculateBMI()">Calculate BMI</button>
-        <button class="btn-reset" onclick="resetCalculator()">Reset</button>
+            <div class="button-group">
+                <button class="btn-calculate" onclick="calculateBMI()">Calculate BMI</button>
+                <button class="btn-reset" onclick="resetForm()">Reset</button>
+            </div>
 
-        <p id="result"></p>
+            <div id="result"></div>
+            
+            <div class="bmi-chart">
+                <div class="chart-bar">
+                    <div class="chart-indicator" id="chartIndicator" style="left: 0%;"></div>
+                </div>
+                <div class="chart-labels">
+                    <span>Underweight</span>
+                    <span>Normal</span>
+                    <span>Overweight</span>
+                    <span>Obese</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BMI History -->
+        <div class="history-container">
+            <h2>BMI History</h2>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>BMI</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody id="historyBody"></tbody>
+            </table>
+            <div class="button-group">
+                <button class="btn-clear-history" onclick="clearHistory()">Clear History</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHistory();
+        });
+
         function calculateBMI() {
-            let weight = parseFloat(document.getElementById("weight").value);
-            let height = parseFloat(document.getElementById("height").value);
-            let weightUnit = document.getElementById("weightUnit").value;
-            let heightUnit = document.getElementById("heightUnit").value;
+            let weight = parseFloat(document.getElementById('weight').value);
+            let height = parseFloat(document.getElementById('height').value);
+            const weightUnit = document.getElementById('weightUnit').value;
+            const heightUnit = document.getElementById('heightUnit').value;
+            const resultDiv = document.getElementById('result');
 
-            if (weight > 0 && height > 0) {
-                // Convert weight to kg if needed
-                if (weightUnit === "lbs") weight = weight * 0.453592;
-
-                // Convert height to meters if needed
-                if (heightUnit === "cm") height = height / 100;
-                else if (heightUnit === "in") height = height * 0.0254;
-
-                let bmi = weight / (height * height);
-                let category = "";
-
-                if (bmi < 18.5) category = "Underweight";
-                else if (bmi < 24.9) category = "Normal weight";
-                else if (bmi < 29.9) category = "Overweight";
-                else category = "Obese";
-
-                document.getElementById("result").innerHTML = `Your BMI is ${bmi.toFixed(2)} (${category})`;
-            } else {
-                document.getElementById("result").innerHTML = "Please enter valid values!";
+            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                resultDiv.innerHTML = '<p style="color: red;">Please enter valid weight and height.</p>';
+                return;
             }
+
+            if (weightUnit === 'lb') weight *= 0.453592;
+            if (heightUnit === 'cm') height /= 100;
+            if (heightUnit === 'in') height *= 0.0254;
+
+            const bmi = weight / (height * height);
+            let category = '';
+            let color = '';
+
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                color = 'var(--info-color)';
+            } else if (bmi < 24.9) {
+                category = 'Normal weight';
+                color = 'var(--success-color)';
+            } else if (bmi < 29.9) {
+                category = 'Overweight';
+                color = 'var(--warning-color)';
+            } else {
+                category = 'Obese';
+                color = 'var(--danger-color)';
+            }
+
+            resultDiv.innerHTML = `
+                <p><strong>Your BMI:</strong> ${bmi.toFixed(2)}</p>
+                <p><strong>Category:</strong> <span style="color:${color}">${category}</span></p>
+                <p style="font-size:0.9rem; color: var(--secondary-color)">Healthy BMI range: 18.5 - 24.9</p>
+            `;
+
+            updateChart(bmi);
+            saveToHistory(bmi, category);
         }
 
-        function resetCalculator() {
-            document.getElementById("weight").value = "";
-            document.getElementById("height").value = "";
-            document.getElementById("result").innerText = "";
+        function updateChart(bmi) {
+            const indicator = document.getElementById('chartIndicator');
+            let percentage = 0;
+            if (bmi < 18.5) percentage = (bmi / 18.5) * 25;
+            else if (bmi < 24.9) percentage = 25 + ((bmi - 18.5) / (24.9 - 18.5)) * 25;
+            else if (bmi < 29.9) percentage = 50 + ((bmi - 25) / (29.9 - 25)) * 25;
+            else percentage = 75 + ((bmi - 30) / 10) * 25;
+            percentage = Math.min(100, Math.max(0, percentage));
+            indicator.style.left = `${percentage}%`;
         }
 
-        function toggleMenu() {
-            document.querySelector("nav ul").classList.toggle("active");
+        function saveToHistory(bmi, category) {
+            const history = JSON.parse(localStorage.getItem('bmiHistory')) || [];
+            const newEntry = { date: new Date().toLocaleDateString(), bmi: bmi.toFixed(2), category };
+            history.unshift(newEntry);
+            if(history.length > 10) history.pop();
+            localStorage.setItem('bmiHistory', JSON.stringify(history));
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('bmiHistory')) || [];
+            document.getElementById('historyBody').innerHTML = history.map(entry => `
+                <tr>
+                    <td>${entry.date}</td>
+                    <td>${entry.bmi}</td>
+                    <td>${entry.category}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('bmiHistory');
+            loadHistory();
+        }
+
+        function resetForm() {
+            document.getElementById('weight').value = '';
+            document.getElementById('height').value = '';
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('chartIndicator').style.left = '0%';
         }
     </script>
 
