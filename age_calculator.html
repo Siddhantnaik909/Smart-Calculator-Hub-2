@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Age Calculator</title>
+    <title>Precision Age & Rashi Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -24,14 +24,10 @@
             --dark-border: #555;
             --card-bg-light: #f1f3f5;
             --card-bg-dark: #3a3a3a;
+            --nav-bg: #222;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
 
         body {
             background: var(--light-bg);
@@ -46,228 +42,176 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        body.dark-mode {
-            background: var(--dark-bg);
-            color: var(--dark-text);
-        }
+        body.dark-mode { background: var(--dark-bg); color: var(--dark-text); }
 
-        /* Navbar */
+        /* ================= RESPONSIVE NAVBAR ================= */
         nav {
-            background: #222;
-            padding: 1rem 2rem;
-            width: 100%;
+            background: var(--nav-bg); 
+            padding: 0.8rem 2rem; 
+            width: 100%; 
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: space-between; 
+            align-items: center; 
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            position: fixed;
-            top: 0;
-            left: 0;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
             z-index: 1000;
         }
-        
-        nav a.logo {
-            color: white;
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: 700;
+
+        nav a.logo { 
+            color: white; 
+            text-decoration: none; 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            white-space: nowrap; 
         }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        nav ul a:hover, nav ul a.active {
-            background-color: var(--primary-hover-color);
-        }
-        
-        .theme-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            margin-left: 15px;
-        }
-
-        .nav-buttons {
-            display: flex;
+        .nav-links { 
+            list-style: none; 
+            display: flex; 
+            gap: 15px; 
             align-items: center;
         }
 
-        /* Container */
+        .nav-links a { 
+            color: white; 
+            text-decoration: none; 
+            font-size: 1rem; 
+            padding: 0.5rem 0.8rem; 
+            border-radius: 5px; 
+            transition: 0.3s; 
+        }
+
+        .nav-links a:hover, .nav-links a.active { 
+            background-color: var(--primary-hover-color); 
+        }
+
+        .nav-right { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        /* Desktop Login Button */
+        .btn-nav-desktop { 
+            display: inline-block; 
+            padding: 0.5rem 1rem; 
+            color: white; 
+            background: var(--success-color); 
+            text-decoration: none; 
+            border-radius: 5px; 
+            font-weight: 500; 
+            font-size: 0.9rem; 
+            transition: 0.3s; 
+        }
+        .btn-nav-desktop:hover { background: #1ba982; }
+
+        /* Mobile Login Link (Hidden on Desktop) */
+        .mobile-login-item { display: none; }
+
+        .theme-toggle { 
+            cursor: pointer; 
+            background: none; 
+            border: none; 
+            color: white; 
+            font-size: 1.2rem; 
+            padding: 5px;
+        }
+
+        .menu-toggle { 
+            display: none; 
+            color: white; 
+            font-size: 1.5rem; 
+            cursor: pointer; 
+            margin-left: 10px;
+        }
+
+        /* ================= CONTAINER ================= */
         .container {
-            background: var(--light-container-bg);
-            color: var(--light-text);
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px; /* Widened slightly for new grid */
-            margin-top: 20px;
-            transition: background 0.3s, color 0.3s;
+            background: var(--light-container-bg); color: var(--light-text);
+            padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%; max-width: 600px; margin-top: 20px; transition: 0.3s;
         }
+        body.dark-mode .container { background: var(--dark-container-bg); color: var(--dark-text); }
 
-        body.dark-mode .container {
-            background: var(--dark-container-bg);
-            color: var(--dark-text);
-        }
+        h2 { margin-bottom: 2rem; font-size: 2rem; text-align: center; }
 
-        h2 {
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            text-align: center;
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.7rem;
-            font-weight: 500;
-            color: var(--secondary-color);
-        }
-
-        input[type="date"] {
-            width: 100%;
-            padding: 0.9rem;
-            border: 1px solid var(--light-border);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: var(--light-bg);
-            color: var(--light-text);
-            transition: all 0.3s;
-        }
+        /* Inputs */
+        .input-group { margin-bottom: 1.5rem; text-align: left; }
+        label { display: block; margin-bottom: 0.7rem; font-weight: 500; color: var(--secondary-color); }
         
-        body.dark-mode input[type="date"] {
-            background: var(--dark-bg);
-            color: var(--dark-text);
-            border-color: var(--dark-border);
+        .date-time-row { display: flex; gap: 10px; }
+        
+        input, select {
+            padding: 0.9rem; border: 1px solid var(--light-border); border-radius: 8px; font-size: 1rem;
+            background: var(--light-bg); color: var(--light-text); transition: all 0.3s; width: 100%;
         }
+        input[type="date"] { flex: 2; }
+        input[type="time"] { flex: 1; }
+        
+        body.dark-mode input, body.dark-mode select { background: var(--dark-bg); color: var(--dark-text); border-color: var(--dark-border); }
+        input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 5px rgba(111, 66, 193, 0.5); }
 
-        input[type="date"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px rgba(111, 66, 193, 0.5);
-        }
+        /* Buttons */
+        .button-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+        button.action-btn { padding: 0.9rem; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 500; cursor: pointer; transition: 0.3s; }
+        .btn-calculate { background-color: var(--success-color); color: white; }
+        .btn-calculate:hover { background-color: var(--success-hover-color); transform: translateY(-2px); }
+        .btn-reset { background-color: var(--danger-color); color: white; }
+        .btn-reset:hover { background-color: #c82333; transform: translateY(-2px); }
 
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        button {
-            padding: 0.9rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-calculate {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-calculate:hover {
-            background-color: var(--success-hover-color);
-            transform: translateY(-2px);
-        }
-
-        .btn-reset {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .btn-reset:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-        }
-
-        /* Result Styles */
-        #result {
-            margin-top: 2rem;
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
+        /* Results */
+        #result { margin-top: 2rem; display: none; animation: fadeIn 0.5s ease-in-out; }
         .result-main {
-            text-align: center;
-            font-size: 1.3rem;
-            padding: 1rem;
-            background: rgba(111, 66, 193, 0.1);
-            border-radius: 10px;
-            border: 2px solid var(--primary-color);
+            text-align: center; font-size: 1.3rem; padding: 1rem;
+            background: rgba(111, 66, 193, 0.1); border-radius: 10px; border: 2px solid var(--primary-color);
             margin-bottom: 1.5rem;
         }
-
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .stat-card {
-            background: var(--card-bg-light);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.2s;
+            background: var(--card-bg-light); padding: 15px; border-radius: 10px; text-align: center; transition: 0.2s;
         }
+        body.dark-mode .stat-card { background: var(--card-bg-dark); }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-card i { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 10px; }
+        .stat-card h4 { font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px; }
+        .stat-card p { font-weight: bold; font-size: 1.1rem; }
 
-        body.dark-mode .stat-card {
-            background: var(--card-bg-dark);
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .stat-card:hover {
-            transform: translateY(-3px);
-        }
+        /* ================= MEDIA QUERIES (Mobile Fixes) ================= */
+        @media screen and (max-width: 768px) {
+            nav { padding: 1rem; }
+            
+            nav a.logo { font-size: 1.2rem; } /* Smaller Logo */
 
-        .stat-card i {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
+            .menu-toggle { display: block; } /* Show Hamburger */
+            
+            .btn-nav-desktop { display: none; } /* Hide Desktop Login Button */
+            .mobile-login-item { display: block; width: 100%; text-align: center; } /* Show Mobile Login */
+            .mobile-login-item a { background-color: var(--success-color); margin-top: 10px; display: inline-block; width: 80%; }
 
-        .stat-card h4 {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .stat-card p {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive */
-        @media (max-width: 500px) {
-            .result-grid {
-                grid-template-columns: 1fr;
+            /* Dropdown Menu */
+            .nav-links {
+                position: absolute; 
+                top: 60px; 
+                left: 0; 
+                width: 100%; 
+                background-color: var(--nav-bg);
+                flex-direction: column; 
+                align-items: center; 
+                padding: 20px 0; 
+                transform: translateY(-150%);
+                transition: transform 0.3s ease-in-out; 
+                z-index: 998;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
             }
+            .nav-links.active { transform: translateY(0); }
+            .nav-links li { width: 100%; text-align: center; margin: 5px 0; }
+            .nav-links a { display: block; width: 100%; padding: 10px 0; }
+            
+            .result-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -275,42 +219,93 @@
 
     <nav>
         <a href="index.html" class="logo">Smart Calculators</a>
-        <ul class="nav-links" style="display: none;"> <li><a href="index.html">Home</a></li>
-            <li><a href="age_calculator.html" class="active">Age</a></li>
-        </ul>
-        <div class="nav-buttons">
+        
+        <div class="nav-right">
+            <a href="login.html" class="btn-nav-desktop">Login</a>
+            
             <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+            
+            <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
         </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="age_calculator.html" class="active">Age</a></li>
+            <li><a href="BMI.html">BMI</a></li>
+            <li><a href="emi.html">EMI</a></li>
+            <li><a href="math_calculator.html">Math</a></li>
+            <li><a href="percentage.html">Percentage</a></li>
+            <li><a href="advanced_math_calculator.html">Advanced</a></li>
+            
+            <li class="mobile-login-item"><a href="login.html">Login</a></li>
+        </ul>
     </nav>
 
     <div class="container">
-        <h2>Modern Age Calculator</h2>
-
+        <h2>Precision Age Calculator</h2>
+        
         <div class="input-group">
-            <label for="birthDate">Your Date of Birth</label>
-            <input type="date" id="birthDate">
+            <label for="birthDate">Date & Time of Birth</label>
+            <div class="date-time-row">
+                <input type="date" id="birthDate">
+                <input type="time" id="birthTime" value="00:00">
+            </div>
         </div>
 
         <div class="input-group">
-            <label for="todayDate">Today's Date</label>
-            <input type="date" id="todayDate">
+            <label for="manualRashi">Select Rashi (Optional - Overrides Auto)</label>
+            <select id="manualRashi">
+                <option value="Auto">Auto-Calculate</option>
+                <option value="Mesha (Aries)">Mesha (Aries)</option>
+                <option value="Vrishabha (Taurus)">Vrishabha (Taurus)</option>
+                <option value="Mithuna (Gemini)">Mithuna (Gemini)</option>
+                <option value="Karka (Cancer)">Karka (Cancer)</option>
+                <option value="Simha (Leo)">Simha (Leo)</option>
+                <option value="Kanya (Virgo)">Kanya (Virgo)</option>
+                <option value="Tula (Libra)">Tula (Libra)</option>
+                <option value="Vrishchika (Scorpio)">Vrishchika (Scorpio)</option>
+                <option value="Dhanu (Sagittarius)">Dhanu (Sagittarius)</option>
+                <option value="Makara (Capricorn)">Makara (Capricorn)</option>
+                <option value="Kumbha (Aquarius)">Kumbha (Aquarius)</option>
+                <option value="Meena (Pisces)">Meena (Pisces)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="todayDate">Current Date & Time</label>
+            <div class="date-time-row">
+                <input type="date" id="todayDate">
+                <input type="time" id="todayTime">
+            </div>
         </div>
 
         <div class="button-group">
-            <button class="btn-calculate" onclick="calculateAge()">Calculate Age</button>
-            <button class="btn-reset" onclick="resetForm()">Reset</button>
+            <button class="action-btn btn-calculate" onclick="calculateAge()">Calculate Age</button>
+            <button class="action-btn btn-reset" onclick="resetForm()">Reset</button>
         </div>
 
-        <div id="result">
-            </div>
+        <div id="result"></div>
     </div>
 
     <script>
-        document.getElementById('todayDate').valueAsDate = new Date();
+        const now = new Date();
+        document.getElementById('todayDate').valueAsDate = now;
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('todayTime').value = `${hours}:${minutes}`;
 
-        // Theme Toggle Logic
+        // Navbar Logic
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenu.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
 
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
@@ -324,149 +319,116 @@
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
 
-        // Add Enter Key Support
-        document.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                calculateAge();
-            }
-        });
-
-        function getZodiacSign(day, month) {
-            const zodiacSigns = [
-                { sign: "Capricorn", endDay: 19 },
-                { sign: "Aquarius", endDay: 18 },
-                { sign: "Pisces", endDay: 20 },
-                { sign: "Aries", endDay: 19 },
-                { sign: "Taurus", endDay: 20 },
-                { sign: "Gemini", endDay: 20 },
-                { sign: "Cancer", endDay: 22 },
-                { sign: "Leo", endDay: 22 },
-                { sign: "Virgo", endDay: 22 },
-                { sign: "Libra", endDay: 22 },
-                { sign: "Scorpio", endDay: 21 },
-                { sign: "Sagittarius", endDay: 21 },
-                { sign: "Capricorn", endDay: 31 } // Loop back to Cap
+        // --- Western Zodiac Logic ---
+        function getWesternZodiac(day, month) {
+            const cutoff = [19, 18, 20, 19, 20, 20, 22, 22, 22, 22, 21, 21];
+            const signs = [
+                "Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini",
+                "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn"
             ];
-            
-            // Adjust month to 0-index match but logic uses 1-12 usually. 
-            // Let's stick to standard logic:
-            if (day > zodiacSigns[month].endDay) {
-                return zodiacSigns[month + 1].sign;
-            } else {
-                return zodiacSigns[month].sign;
-            }
+            return day > cutoff[month] ? signs[month + 1] : signs[month];
+        }
+
+        // --- Approx Vedic Logic (Fallback if not manually selected) ---
+        function getVedicSunSign(day, month) {
+            const cutoff = [13, 12, 13, 13, 14, 14, 15, 16, 16, 16, 15, 15]; 
+            const signs = [
+                "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)", 
+                "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)", 
+                "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)", "Dhanu (Sagittarius)"
+            ];
+            return day > cutoff[month] ? signs[month + 1] : signs[month];
         }
 
         function calculateAge() {
-            const birthDateInput = document.getElementById('birthDate').value;
-            const todayDateInput = document.getElementById('todayDate').value;
+            const birthDateVal = document.getElementById('birthDate').value;
+            const birthTimeVal = document.getElementById('birthTime').value;
+            const todayDateVal = document.getElementById('todayDate').value;
+            const todayTimeVal = document.getElementById('todayTime').value;
+            const manualRashi = document.getElementById('manualRashi').value;
             const resultDiv = document.getElementById('result');
 
-            if (!birthDateInput) {
+            if (!birthDateVal || !todayDateVal) {
                 resultDiv.style.display = 'block';
-                resultDiv.innerHTML = '<p style="color: var(--danger-color); text-align: center;">Please enter a valid date of birth.</p>';
+                resultDiv.innerHTML = '<p style="color: var(--danger-color); text-align: center;">Please enter valid dates.</p>';
                 return;
             }
 
-            const birthDate = new Date(birthDateInput);
-            const todayDate = new Date(todayDateInput);
+            const birth = new Date(`${birthDateVal}T${birthTimeVal || '00:00'}`);
+            const current = new Date(`${todayDateVal}T${todayTimeVal || '00:00'}`);
 
-            if (birthDate > todayDate) {
+            if (birth > current) {
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = '<p style="color: var(--danger-color); text-align: center;">Birth date cannot be in the future.</p>';
                 return;
             }
 
-            // --- Age Calculation ---
-            let years = todayDate.getFullYear() - birthDate.getFullYear();
-            let months = todayDate.getMonth() - birthDate.getMonth();
-            let days = todayDate.getDate() - birthDate.getDate();
+            // Age Calculation
+            let years = current.getFullYear() - birth.getFullYear();
+            let months = current.getMonth() - birth.getMonth();
+            let days = current.getDate() - birth.getDate();
 
             if (days < 0) {
                 months--;
-                const lastMonth = new Date(todayDate.getFullYear(), todayDate.getMonth(), 0);
+                const lastMonth = new Date(current.getFullYear(), current.getMonth(), 0);
                 days += lastMonth.getDate();
             }
-
             if (months < 0) {
                 years--;
                 months += 12;
             }
 
-            // --- Extra Stats ---
-            const totalDays = Math.floor((todayDate - birthDate) / (1000 * 60 * 60 * 24));
-            const totalHours = totalDays * 24;
-            
-            // Day of Birth
+            // Stats
+            const diffMs = current - birth;
+            const totalSeconds = Math.floor(diffMs / 1000);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalDays = Math.floor(totalHours / 24);
+            const totalWeeks = Math.floor(totalDays / 7);
+
             const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const birthDayName = daysOfWeek[birthDate.getDay()];
-
-            // Zodiac
-            const zodiac = getZodiacSign(birthDate.getDate(), birthDate.getMonth());
-
-            // Next Birthday Logic
-            const currentYear = todayDate.getFullYear();
-            let nextBirthday = new Date(currentYear, birthDate.getMonth(), birthDate.getDate());
+            const birthDayName = daysOfWeek[birth.getDay()];
             
-            if (todayDate > nextBirthday) {
-                nextBirthday.setFullYear(currentYear + 1);
-            }
+            // Zodiac Determination
+            const westernZodiac = getWesternZodiac(birth.getDate(), birth.getMonth());
             
-            const timeToNext = nextBirthday - todayDate;
-            const daysToNext = Math.ceil(timeToNext / (1000 * 60 * 60 * 24));
-            let monthsToNext = Math.floor(daysToNext / 30.44); // Approx
-            let remainingDaysToNext = Math.floor(daysToNext % 30.44);
-            
-            // Simple string for next bday
-            const nextBdayString = daysToNext === 0 ? "Today! Happy Birthday! 🎂" : `${daysToNext} days`;
+            // Use manual if selected, otherwise use Approx Vedic
+            let rashiDisplay = (manualRashi !== "Auto") ? manualRashi : getVedicSunSign(birth.getDate(), birth.getMonth());
 
-            // --- Render HTML ---
+            // Next Birthday
+            const nextBirthday = new Date(current.getFullYear(), birth.getMonth(), birth.getDate());
+            if (current > nextBirthday) nextBirthday.setFullYear(current.getFullYear() + 1);
+            const daysToNext = Math.ceil((nextBirthday - current) / (1000 * 60 * 60 * 24));
+            const nextBdayString = daysToNext === 0 ? "Today! 🎂" : `${daysToNext} days`;
+
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
                 <div class="result-main">
                     <strong>${years}</strong> Years, <strong>${months}</strong> Months, <strong>${days}</strong> Days
                 </div>
-
                 <div class="result-grid">
-                    <div class="stat-card">
-                        <i class="fas fa-calendar-day"></i>
-                        <h4>Day of Birth</h4>
-                        <p>${birthDayName}</p>
+                    <div class="stat-card"><i class="fas fa-clock"></i><h4>Total Hours</h4><p>${totalHours.toLocaleString()}</p></div>
+                    <div class="stat-card"><i class="fas fa-stopwatch"></i><h4>Total Minutes</h4><p>${totalMinutes.toLocaleString()}</p></div>
+                    <div class="stat-card"><i class="fas fa-hourglass-start"></i><h4>Total Seconds</h4><p>${totalSeconds.toLocaleString()}</p></div>
+                    <div class="stat-card"><i class="fas fa-calendar-week"></i><h4>Total Weeks</h4><p>${totalWeeks.toLocaleString()}</p></div>
+                    <div class="stat-card"><i class="fas fa-star"></i><h4>Western Zodiac</h4><p>${westernZodiac}</p></div>
+                    <div class="stat-card" style="border: 2px solid var(--primary-color); background: rgba(111, 66, 193, 0.05);">
+                        <i class="fas fa-om"></i><h4>Rashi (Moon Sign)</h4><p>${rashiDisplay}</p>
                     </div>
-                    <div class="stat-card">
-                        <i class="fas fa-star"></i>
-                        <h4>Zodiac Sign</h4>
-                        <p>${zodiac}</p>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-hourglass-half"></i>
-                        <h4>Total Days Alive</h4>
-                        <p>${totalDays.toLocaleString()}</p>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-birthday-cake"></i>
-                        <h4>Next Birthday</h4>
-                        <p>${nextBdayString}</p>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-clock"></i>
-                        <h4>Total Hours</h4>
-                        <p>${totalHours.toLocaleString()}</p>
-                    </div>
-                     <div class="stat-card">
-                        <i class="fas fa-baby"></i>
-                        <h4>Months Old</h4>
-                        <p>${(years * 12) + months}</p>
-                    </div>
+                    <div class="stat-card"><i class="fas fa-calendar-day"></i><h4>Day of Birth</h4><p>${birthDayName}</p></div>
+                    <div class="stat-card"><i class="fas fa-birthday-cake"></i><h4>Next B-Day</h4><p>${nextBdayString}</p></div>
                 </div>
             `;
         }
 
         function resetForm() {
             document.getElementById('birthDate').value = '';
-            document.getElementById('todayDate').valueAsDate = new Date();
+            document.getElementById('birthTime').value = '00:00';
+            document.getElementById('manualRashi').value = 'Auto';
+            const now = new Date();
+            document.getElementById('todayDate').valueAsDate = now;
+            document.getElementById('todayTime').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
             document.getElementById('result').style.display = 'none';
-            document.getElementById('result').innerHTML = '';
         }
     </script>
 
