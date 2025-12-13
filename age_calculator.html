@@ -22,6 +22,8 @@
             --dark-text: #f8f9fa;
             --light-border: #ccc;
             --dark-border: #555;
+            --card-bg-light: #f1f3f5;
+            --card-bg-dark: #3a3a3a;
         }
 
         * {
@@ -40,6 +42,7 @@
             justify-content: center;
             min-height: 100vh;
             padding-top: 80px;
+            padding-bottom: 40px;
             transition: background 0.3s, color 0.3s;
         }
 
@@ -111,7 +114,7 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 90%;
-            max-width: 500px;
+            max-width: 600px; /* Widened slightly for new grid */
             margin-top: 20px;
             transition: background 0.3s, color 0.3s;
         }
@@ -199,51 +202,87 @@
             transform: translateY(-2px);
         }
 
+        /* Result Styles */
         #result {
-            margin-top: 2.5rem;
+            margin-top: 2rem;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .result-main {
             text-align: center;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            background: var(--light-bg);
+            font-size: 1.3rem;
             padding: 1rem;
-            border-radius: 8px;
-        }
-        
-        body.dark-mode #result {
-            background: var(--dark-bg);
-        }
-
-        #result p {
-            margin-bottom: 0.5rem;
+            background: rgba(111, 66, 193, 0.1);
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            margin-bottom: 1.5rem;
         }
 
-        #result strong {
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: var(--card-bg-light);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        body.dark-mode .stat-card {
+            background: var(--card-bg-dark);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-card i {
+            font-size: 1.5rem;
             color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-card h4 {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav>
         <a href="index.html" class="logo">Smart Calculators</a>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
+        <ul class="nav-links" style="display: none;"> <li><a href="index.html">Home</a></li>
             <li><a href="age_calculator.html" class="active">Age</a></li>
-            <li><a href="BMI.html">BMI</a></li>
-            <li><a href="emi.html">EMI</a></li>
-            <li><a href="math_calculator.html">Math</a></li>
-            <li><a href="percentage.html">Percentage</a></li>
-            <li><a href="advanced_math_calculator.html">Advanced</a></li>
         </ul>
         <div class="nav-buttons">
-            <a href="login.html" class="btn" style="margin-right: 10px;">Login</a>
-            <a href="signup.html" class="btn">Sign Up</a>
             <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
         </div>
     </nav>
 
-    <!-- Age Calculator -->
     <div class="container">
         <h2>Modern Age Calculator</h2>
 
@@ -262,12 +301,14 @@
             <button class="btn-reset" onclick="resetForm()">Reset</button>
         </div>
 
-        <div id="result"></div>
+        <div id="result">
+            </div>
     </div>
 
     <script>
         document.getElementById('todayDate').valueAsDate = new Date();
 
+        // Theme Toggle Logic
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
 
@@ -278,29 +319,65 @@
             themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         });
 
-        // Load theme from local storage
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
 
+        // Add Enter Key Support
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                calculateAge();
+            }
+        });
+
+        function getZodiacSign(day, month) {
+            const zodiacSigns = [
+                { sign: "Capricorn", endDay: 19 },
+                { sign: "Aquarius", endDay: 18 },
+                { sign: "Pisces", endDay: 20 },
+                { sign: "Aries", endDay: 19 },
+                { sign: "Taurus", endDay: 20 },
+                { sign: "Gemini", endDay: 20 },
+                { sign: "Cancer", endDay: 22 },
+                { sign: "Leo", endDay: 22 },
+                { sign: "Virgo", endDay: 22 },
+                { sign: "Libra", endDay: 22 },
+                { sign: "Scorpio", endDay: 21 },
+                { sign: "Sagittarius", endDay: 21 },
+                { sign: "Capricorn", endDay: 31 } // Loop back to Cap
+            ];
+            
+            // Adjust month to 0-index match but logic uses 1-12 usually. 
+            // Let's stick to standard logic:
+            if (day > zodiacSigns[month].endDay) {
+                return zodiacSigns[month + 1].sign;
+            } else {
+                return zodiacSigns[month].sign;
+            }
+        }
 
         function calculateAge() {
-            // ... (rest of the script is the same)
-            const birthDate = new Date(document.getElementById('birthDate').value);
-            const todayDate = new Date(document.getElementById('todayDate').value);
+            const birthDateInput = document.getElementById('birthDate').value;
+            const todayDateInput = document.getElementById('todayDate').value;
             const resultDiv = document.getElementById('result');
 
-            if (isNaN(birthDate)) {
-                resultDiv.innerHTML = '<p style="color: red;">Please enter a valid date of birth.</p>';
+            if (!birthDateInput) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<p style="color: var(--danger-color); text-align: center;">Please enter a valid date of birth.</p>';
                 return;
             }
+
+            const birthDate = new Date(birthDateInput);
+            const todayDate = new Date(todayDateInput);
 
             if (birthDate > todayDate) {
-                resultDiv.innerHTML = '<p style="color: red;">Birth date cannot be in the future.</p>';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<p style="color: var(--danger-color); text-align: center;">Birth date cannot be in the future.</p>';
                 return;
             }
 
+            // --- Age Calculation ---
             let years = todayDate.getFullYear() - birthDate.getFullYear();
             let months = todayDate.getMonth() - birthDate.getMonth();
             let days = todayDate.getDate() - birthDate.getDate();
@@ -316,24 +393,79 @@
                 months += 12;
             }
 
+            // --- Extra Stats ---
             const totalDays = Math.floor((todayDate - birthDate) / (1000 * 60 * 60 * 24));
             const totalHours = totalDays * 24;
-            const totalMinutes = totalHours * 60;
-            const totalSeconds = totalMinutes * 60;
+            
+            // Day of Birth
+            const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const birthDayName = daysOfWeek[birthDate.getDay()];
 
+            // Zodiac
+            const zodiac = getZodiacSign(birthDate.getDate(), birthDate.getMonth());
+
+            // Next Birthday Logic
+            const currentYear = todayDate.getFullYear();
+            let nextBirthday = new Date(currentYear, birthDate.getMonth(), birthDate.getDate());
+            
+            if (todayDate > nextBirthday) {
+                nextBirthday.setFullYear(currentYear + 1);
+            }
+            
+            const timeToNext = nextBirthday - todayDate;
+            const daysToNext = Math.ceil(timeToNext / (1000 * 60 * 60 * 24));
+            let monthsToNext = Math.floor(daysToNext / 30.44); // Approx
+            let remainingDaysToNext = Math.floor(daysToNext % 30.44);
+            
+            // Simple string for next bday
+            const nextBdayString = daysToNext === 0 ? "Today! Happy Birthday! 🎂" : `${daysToNext} days`;
+
+            // --- Render HTML ---
+            resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
-                <p><strong>Age:</strong> ${years} years, ${months} months, ${days} days</p>
-                <hr>
-                <p><strong>Total Days:</strong> ${totalDays.toLocaleString()}</p>
-                <p><strong>Total Hours:</strong> ${totalHours.toLocaleString()}</p>
-                <p><strong>Total Minutes:</strong> ${totalMinutes.toLocaleString()}</p>
-                <p><strong>Total Seconds:</strong> ${totalSeconds.toLocaleString()}</p>
+                <div class="result-main">
+                    <strong>${years}</strong> Years, <strong>${months}</strong> Months, <strong>${days}</strong> Days
+                </div>
+
+                <div class="result-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-day"></i>
+                        <h4>Day of Birth</h4>
+                        <p>${birthDayName}</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <h4>Zodiac Sign</h4>
+                        <p>${zodiac}</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-hourglass-half"></i>
+                        <h4>Total Days Alive</h4>
+                        <p>${totalDays.toLocaleString()}</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-birthday-cake"></i>
+                        <h4>Next Birthday</h4>
+                        <p>${nextBdayString}</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <h4>Total Hours</h4>
+                        <p>${totalHours.toLocaleString()}</p>
+                    </div>
+                     <div class="stat-card">
+                        <i class="fas fa-baby"></i>
+                        <h4>Months Old</h4>
+                        <p>${(years * 12) + months}</p>
+                    </div>
+                </div>
             `;
         }
 
         function resetForm() {
             document.getElementById('birthDate').value = '';
             document.getElementById('todayDate').valueAsDate = new Date();
+            document.getElementById('result').style.display = 'none';
             document.getElementById('result').innerHTML = '';
         }
     </script>
