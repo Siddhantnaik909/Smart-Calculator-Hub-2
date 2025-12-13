@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMI Calculator</title>
+    <title>EMI Calculator with History</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -22,14 +22,12 @@
             --dark-text: #f8f9fa;
             --light-border: #ccc;
             --dark-border: #555;
+            --card-bg-light: #f1f3f5;
+            --card-bg-dark: #3a3a3a;
+            --nav-bg: #222;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
 
         body {
             background: var(--light-bg);
@@ -37,196 +35,124 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             padding-top: 80px;
+            padding-bottom: 40px;
             transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
         }
 
-        body.dark-mode {
-            background: var(--dark-bg);
-            color: var(--dark-text);
-        }
+        body.dark-mode { background: var(--dark-bg); color: var(--dark-text); }
 
-        /* Navbar */
+        /* ================= NAVBAR ================= */
         nav {
-            background: #222;
-            padding: 1rem 2rem;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
+            background: var(--nav-bg); padding: 0.8rem 2rem; width: 100%; display: flex;
+            justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: fixed; top: 0; left: 0; z-index: 1000;
         }
-        
-        nav a.logo {
-            color: white;
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
+        nav a.logo { color: white; text-decoration: none; font-size: 1.5rem; font-weight: 700; white-space: nowrap; }
+        .nav-links { list-style: none; display: flex; gap: 15px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; font-size: 1rem; padding: 0.5rem 0.8rem; border-radius: 5px; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { background-color: var(--primary-hover-color); }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .btn-nav-desktop { display: inline-block; padding: 0.5rem 1rem; color: white; background: var(--success-color); text-decoration: none; border-radius: 5px; font-weight: 500; font-size: 0.9rem; transition: 0.3s; }
+        .btn-nav-desktop:hover { background: #1ba982; }
+        .mobile-login-item { display: none; }
+        .theme-toggle { cursor: pointer; background: none; border: none; color: white; font-size: 1.2rem; padding: 5px; }
+        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; margin-left: 10px; }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        nav ul a:hover, nav ul a.active {
-            background-color: var(--primary-hover-color);
-        }
-        
-        .theme-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            margin-left: 15px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            align-items: center;
-        }
-
-        /* Calculator Container */
+        /* ================= CONTAINER ================= */
         .container {
-            background: var(--light-container-bg);
-            color: var(--light-text);
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 500px;
-            margin-top: 20px;
-            transition: background 0.3s, color 0.3s;
+            background: var(--light-container-bg); color: var(--light-text);
+            padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%; max-width: 600px; margin-top: 20px; transition: 0.3s;
         }
+        body.dark-mode .container { background: var(--dark-container-bg); color: var(--dark-text); }
 
-        body.dark-mode .container {
-            background: var(--dark-container-bg);
-            color: var(--dark-text);
+        h2 { margin-bottom: 2rem; font-size: 2rem; text-align: center; }
+
+        .input-group { margin-bottom: 1.5rem; text-align: left; }
+        label { display: block; margin-bottom: 0.7rem; font-weight: 500; color: var(--secondary-color); }
+        
+        input {
+            width: 100%; padding: 0.9rem; border: 1px solid var(--light-border); border-radius: 8px; font-size: 1rem;
+            background: var(--light-bg); color: var(--light-text); transition: all 0.3s;
         }
+        body.dark-mode input { background: var(--dark-bg); color: var(--dark-text); border-color: var(--dark-border); }
+        input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 5px rgba(111, 66, 193, 0.5); }
 
-        h2 {
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            text-align: center;
-        }
+        /* Buttons */
+        .button-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+        button.action-btn { padding: 0.9rem; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 500; cursor: pointer; transition: 0.3s; }
+        .btn-calculate { background-color: var(--success-color); color: white; }
+        .btn-calculate:hover { background-color: var(--success-hover-color); transform: translateY(-2px); }
+        .btn-reset { background-color: var(--danger-color); color: white; }
+        .btn-reset:hover { background-color: #c82333; transform: translateY(-2px); }
 
-        .input-group {
+        /* Result Display */
+        #result { margin-top: 2rem; display: none; animation: fadeIn 0.5s ease-in-out; }
+        .result-main {
+            text-align: center; font-size: 1.4rem; padding: 1rem;
+            background: rgba(111, 66, 193, 0.1); border-radius: 10px; border: 2px solid var(--primary-color);
             margin-bottom: 1.5rem;
-            text-align: left;
         }
+        .result-main span { display: block; font-size: 0.9rem; color: var(--secondary-color); margin-bottom: 5px; }
+        .result-main strong { color: var(--primary-color); font-size: 1.8rem; }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .stat-card { background: var(--card-bg-light); padding: 15px; border-radius: 10px; text-align: center; transition: 0.2s; }
+        body.dark-mode .stat-card { background: var(--card-bg-dark); }
+        .stat-card h4 { font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px; }
+        .stat-card p { font-weight: bold; font-size: 1.1rem; }
 
-        label {
-            display: block;
-            margin-bottom: 0.7rem;
-            font-weight: 500;
-            color: var(--secondary-color);
+        /* ================= HISTORY SECTION ================= */
+        .history-container {
+            width: 90%; max-width: 600px; margin-top: 30px;
+            background: var(--light-container-bg); padding: 20px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: var(--light-text);
         }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 0.9rem;
-            border: 1px solid var(--light-border);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: var(--light-bg);
-            color: var(--light-text);
-            transition: all 0.3s;
-        }
+        body.dark-mode .history-container { background: var(--dark-container-bg); color: var(--dark-text); }
         
-        body.dark-mode input[type="number"] {
-            background: var(--dark-bg);
-            color: var(--dark-text);
-            border-color: var(--dark-border);
-        }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-clear { background: none; border: none; color: var(--danger-color); cursor: pointer; font-size: 0.9rem; }
+        .btn-clear:hover { text-decoration: underline; }
 
-        input[type="number"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px rgba(111, 66, 193, 0.5);
-        }
-
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        button {
-            padding: 0.9rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-calculate {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-calculate:hover {
-            background-color: var(--success-hover-color);
-            transform: translateY(-2px);
-        }
-
-        .btn-reset {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .btn-reset:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-        }
-
-        #result {
-            margin-top: 2.5rem;
-            text-align: left;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            background: var(--light-bg);
-            padding: 1.5rem;
-            border-radius: 8px;
-        }
+        .table-wrapper { overflow-x: auto; }
         
-        body.dark-mode #result {
-            background: var(--dark-bg);
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 400px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--light-border); }
+        body.dark-mode th, body.dark-mode td { border-color: var(--dark-border); }
+        th { color: var(--secondary-color); font-weight: 500; }
 
-        #result p {
-            margin-bottom: 0.8rem;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        #result strong {
-            color: var(--primary-color);
+        /* Mobile Fixes */
+        @media screen and (max-width: 768px) {
+            nav { padding: 1rem; }
+            nav a.logo { font-size: 1.2rem; } 
+            .menu-toggle { display: block; }
+            .btn-nav-desktop { display: none; }
+            .mobile-login-item { display: block; width: 100%; text-align: center; } 
+            .mobile-login-item a { background-color: var(--success-color); margin-top: 10px; display: inline-block; width: 80%; }
+            .nav-links {
+                position: absolute; top: 60px; left: 0; width: 100%; background-color: var(--nav-bg);
+                flex-direction: column; align-items: center; padding: 20px 0; transform: translateY(-150%);
+                transition: transform 0.3s ease-in-out; z-index: 998; box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            }
+            .nav-links.active { transform: translateY(0); }
+            .nav-links li { width: 100%; text-align: center; margin: 5px 0; }
+            .nav-links a { display: block; width: 100%; padding: 10px 0; }
+            .result-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav>
         <a href="index.html" class="logo">Smart Calculators</a>
+        <div class="nav-right">
+            <a href="login.html" class="btn-nav-desktop">Login</a>
+            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+            <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
+        </div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="age_calculator.html">Age</a></li>
@@ -235,44 +161,64 @@
             <li><a href="math_calculator.html">Math</a></li>
             <li><a href="percentage.html">Percentage</a></li>
             <li><a href="advanced_math_calculator.html">Advanced</a></li>
+            <li class="mobile-login-item"><a href="login.html">Login</a></li>
         </ul>
-        <div class="nav-buttons">
-            <a href="login.html" class="btn" style="margin-right: 10px;">Login</a>
-            <a href="signup.html" class="btn">Sign Up</a>
-            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
-        </div>
     </nav>
 
-    <!-- EMI Calculator -->
     <div class="container">
-        <h2>Modern EMI Calculator</h2>
-
+        <h2>EMI Calculator</h2>
         <div class="input-group">
             <label for="loanAmount">Loan Amount (₹)</label>
             <input type="number" id="loanAmount" placeholder="e.g., 100000">
         </div>
-
         <div class="input-group">
             <label for="interestRate">Annual Interest Rate (%)</label>
             <input type="number" id="interestRate" placeholder="e.g., 10.5">
         </div>
-
         <div class="input-group">
             <label for="loanTenure">Loan Tenure (Years)</label>
             <input type="number" id="loanTenure" placeholder="e.g., 5">
         </div>
-
         <div class="button-group">
-            <button class="btn-calculate" onclick="calculateEMI()">Calculate EMI</button>
-            <button class="btn-reset" onclick="resetForm()">Reset</button>
+            <button class="action-btn btn-calculate" onclick="calculateEMI()">Calculate EMI</button>
+            <button class="action-btn btn-reset" onclick="resetForm()">Reset</button>
         </div>
-
         <div id="result"></div>
     </div>
 
+    <div class="history-container" id="history-section" style="display:none;">
+        <div class="history-header">
+            <h3>Recent Calculations</h3>
+            <button class="btn-clear" onclick="clearHistory()">Clear History</button>
+        </div>
+        <div class="table-wrapper">
+            <table id="history-table">
+                <thead>
+                    <tr>
+                        <th>Loan</th>
+                        <th>Rate</th>
+                        <th>Years</th>
+                        <th>EMI</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body"></tbody>
+            </table>
+        </div>
+    </div>
+
     <script>
+        // Navbar & Theme Logic
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenu.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
 
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
@@ -286,6 +232,9 @@
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
 
+        // --- History Logic ---
+        document.addEventListener('DOMContentLoaded', loadHistory);
+
         function calculateEMI() {
             const loanAmount = parseFloat(document.getElementById('loanAmount').value);
             const interestRate = parseFloat(document.getElementById('interestRate').value);
@@ -293,7 +242,8 @@
             const resultDiv = document.getElementById('result');
 
             if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTenure) || loanAmount <= 0 || interestRate <= 0 || loanTenure <= 0) {
-                resultDiv.innerHTML = '<p style="color: red;">Please enter valid numbers for all fields.</p>';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<p style="color: var(--danger-color); text-align: center;">Please enter valid numbers for all fields.</p>';
                 return;
             }
 
@@ -304,17 +254,84 @@
             const totalPayment = emi * numberOfMonths;
             const totalInterest = totalPayment - loanAmount;
 
+            const emiFormatted = `₹${emi.toFixed(2).toLocaleString()}`;
+
+            resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
-                <p><strong>Monthly EMI:</strong> ₹${emi.toFixed(2).toLocaleString()}</p>
-                <p><strong>Total Interest:</strong> ₹${totalInterest.toFixed(2).toLocaleString()}</p>
-                <p><strong>Total Payment:</strong> ₹${totalPayment.toFixed(2).toLocaleString()}</p>
+                <div class="result-main">
+                    <span>Monthly EMI</span>
+                    <strong>${emiFormatted}</strong>
+                </div>
+                <div class="result-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <h4>Principal</h4>
+                        <p>₹${loanAmount.toLocaleString()}</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-percentage"></i>
+                        <h4>Interest</h4>
+                        <p>₹${totalInterest.toFixed(2).toLocaleString()}</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-wallet"></i>
+                        <h4>Total</h4>
+                        <p>₹${totalPayment.toFixed(2).toLocaleString()}</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h4>Tenure</h4>
+                        <p>${loanTenure} Years</p>
+                    </div>
+                </div>
             `;
+
+            saveHistory(loanAmount, interestRate, loanTenure, emiFormatted);
+        }
+
+        function saveHistory(amount, rate, years, emi) {
+            const history = JSON.parse(localStorage.getItem('emiHistory')) || [];
+            const newEntry = { amount: amount.toLocaleString(), rate, years, emi };
+            
+            // Add to top, keep only last 5 entries
+            history.unshift(newEntry);
+            if (history.length > 5) history.pop();
+            
+            localStorage.setItem('emiHistory', JSON.stringify(history));
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('emiHistory')) || [];
+            const historySection = document.getElementById('history-section');
+            const historyBody = document.getElementById('history-body');
+
+            if (history.length === 0) {
+                historySection.style.display = 'none';
+                return;
+            }
+
+            historySection.style.display = 'block';
+            historyBody.innerHTML = history.map(entry => `
+                <tr>
+                    <td>₹${entry.amount}</td>
+                    <td>${entry.rate}%</td>
+                    <td>${entry.years} yr</td>
+                    <td style="color: var(--success-color); font-weight:bold;">${entry.emi}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('emiHistory');
+            loadHistory();
         }
 
         function resetForm() {
             document.getElementById('loanAmount').value = '';
             document.getElementById('interestRate').value = '';
             document.getElementById('loanTenure').value = '';
+            document.getElementById('result').style.display = 'none';
             document.getElementById('result').innerHTML = '';
         }
     </script>
