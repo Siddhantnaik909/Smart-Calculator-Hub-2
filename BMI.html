@@ -24,6 +24,7 @@
             --dark-text: #f8f9fa;
             --light-border: #ccc;
             --dark-border: #555;
+            --nav-bg: #222;
         }
 
         * {
@@ -39,8 +40,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 80px;
+            padding-top: 80px; /* Space for fixed navbar */
             transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
         }
 
         body.dark-mode {
@@ -50,7 +52,7 @@
 
         /* Navbar */
         nav {
-            background: #222;
+            background: var(--nav-bg);
             padding: 1rem 2rem;
             width: 100%;
             display: flex;
@@ -70,43 +72,52 @@
             font-weight: 700;
         }
 
-        nav ul {
+        /* Nav Links - Desktop */
+        .nav-links {
             list-style: none;
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
 
-        nav a {
+        .nav-links a {
             color: white;
             text-decoration: none;
-            font-size: 1.1rem;
-            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            padding: 0.5rem 0.8rem;
             border-radius: 5px;
             transition: background-color 0.3s;
         }
 
-        nav ul a:hover, nav ul a.active {
+        .nav-links a:hover, .nav-links a.active {
             background-color: var(--primary-hover-color);
         }
         
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .theme-toggle {
             cursor: pointer;
             background: none;
             border: none;
             color: white;
-            font-size: 1.5rem;
-            margin-left: 15px;
+            font-size: 1.2rem;
         }
 
-        .nav-buttons {
-            display: flex;
-            align-items: center;
+        /* Hamburger Menu (Hidden on Desktop) */
+        .menu-toggle {
+            display: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
         /* Main Container */
         .main-container {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Allows stacking on mobile */
             justify-content: center;
             gap: 2rem;
             padding: 2rem;
@@ -122,7 +133,8 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 500px;
+            max-width: 500px; /* Limits width on desktop */
+            flex: 1 1 400px; /* Allows shrinking/growing */
             transition: background 0.3s, color 0.3s;
         }
 
@@ -149,8 +161,14 @@
             color: var(--secondary-color);
         }
 
-        input[type="number"], select {
-            width: 100%;
+        /* Responsive Input Rows */
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="number"] {
+            flex: 2; /* Takes up more space */
             padding: 0.9rem;
             border: 1px solid var(--light-border);
             border-radius: 8px;
@@ -158,6 +176,18 @@
             background: var(--light-bg);
             color: var(--light-text);
             transition: all 0.3s;
+            min-width: 0; /* Prevents overflow */
+        }
+
+        select {
+            flex: 1; /* Takes up less space */
+            padding: 0.9rem;
+            border: 1px solid var(--light-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--light-bg);
+            color: var(--light-text);
+            min-width: 80px;
         }
 
         body.dark-mode input[type="number"], body.dark-mode select {
@@ -189,35 +219,27 @@
             transition: all 0.3s;
         }
 
-        .btn-calculate {
-            background-color: var(--success-color);
-            color: white;
-        }
+        .btn-calculate { background-color: var(--success-color); color: white; }
+        .btn-calculate:hover { background-color: var(--success-hover-color); transform: translateY(-2px); }
 
-        .btn-calculate:hover {
-            background-color: var(--success-hover-color);
-            transform: translateY(-2px);
-        }
-
-        .btn-reset {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .btn-reset:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-        }
+        .btn-reset { background-color: var(--danger-color); color: white; }
+        .btn-reset:hover { background-color: #c82333; transform: translateY(-2px); }
         
         .btn-clear-history {
             background-color: var(--warning-color);
             color: #212529;
             grid-column: 1 / -1;
         }
-        
-        .btn-clear-history:hover {
-            background-color: #e0a800;
-            transform: translateY(-2px);
+        .btn-clear-history:hover { background-color: #e0a800; transform: translateY(-2px); }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            color: white;
+            background: var(--success-color);
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
         }
 
         #result {
@@ -228,6 +250,7 @@
             background: var(--light-bg);
             padding: 1rem;
             border-radius: 8px;
+            min-height: 60px; /* Prevents layout jump */
         }
         
         body.dark-mode #result {
@@ -235,41 +258,46 @@
         }
 
         /* BMI Chart */
-        .bmi-chart {
-            margin-top: 2rem;
-        }
+        .bmi-chart { margin-top: 2rem; }
 
         .chart-bar {
             height: 20px;
-            background-color: #eee;
+            background: linear-gradient(to right, #17a2b8 18%, #20c997 25%, #ffc107 30%, #dc3545 100%);
             border-radius: 10px;
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* Changed to visible so indicator shows */
         }
 
         .chart-indicator {
             position: absolute;
-            top: 0;
-            height: 100%;
-            width: 5px;
-            background-color: var(--danger-color);
+            top: -5px;
+            height: 30px;
+            width: 4px;
+            background-color: var(--primary-color);
+            border: 2px solid white;
             transform: translateX(-50%);
             transition: left 0.5s ease;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
         .chart-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin-top: 0.5rem;
             color: var(--secondary-color);
         }
         
-        /* History Table */
+        /* History Table - Responsive Wrapper */
+        .table-wrapper {
+            overflow-x: auto; /* Allows table to scroll on mobile */
+        }
+
         .history-table {
             width: 100%;
             margin-top: 1.5rem;
             border-collapse: collapse;
+            min-width: 300px;
         }
         
         .history-table th, .history-table td {
@@ -290,13 +318,59 @@
             background-color: var(--dark-bg);
         }
 
+        /* ================= MEDIA QUERIES ================= */
+        @media screen and (max-width: 768px) {
+            nav { padding: 1rem; }
+
+            .menu-toggle {
+                display: block; /* Show hamburger */
+                order: 3; 
+            }
+
+            .nav-right {
+                order: 2;
+                margin-right: 15px;
+            }
+            
+            /* Mobile Nav Dropdown */
+            .nav-links {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--nav-bg);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                transform: translateY(-150%);
+                transition: transform 0.3s ease-in-out;
+                z-index: 999;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            }
+
+            .nav-links.active { transform: translateY(0); }
+
+            .nav-links li { width: 100%; text-align: center; margin: 10px 0; }
+            .nav-links a { display: block; width: 100%; padding: 10px 0; }
+
+            /* Content Adjustments */
+            .main-container { padding: 1rem; }
+            .calculator-container, .history-container { padding: 1.5rem; }
+            
+            h2 { font-size: 1.5rem; }
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav>
         <a href="index.html" class="logo">Smart Calculators</a>
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="age_calculator.html">Age</a></li>
@@ -306,23 +380,25 @@
             <li><a href="percentage.html">Percentage</a></li>
             <li><a href="advanced_math_calculator.html">Advanced</a></li>
         </ul>
-        <div class="nav-buttons">
-            <a href="login.html" class="btn" style="margin-right: 10px;">Login</a>
-            <a href="signup.html" class="btn">Sign Up</a>
+
+        <div class="nav-right">
+            <a href="login.html" class="btn">Login</a>
             <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="main-container">
         
-        <!-- BMI Calculator -->
         <div class="calculator-container">
             <h2>Modern BMI Calculator</h2>
+            
+
+[Image of body mass index formula]
+
 
             <div class="input-group">
                 <label for="weight">Weight</label>
-                <div style="display:flex; gap:10px;">
+                <div class="input-row">
                     <input type="number" id="weight" placeholder="Enter weight">
                     <select id="weightUnit">
                         <option value="kg">kg</option>
@@ -333,7 +409,7 @@
 
             <div class="input-group">
                 <label for="height">Height</label>
-                 <div style="display:flex; gap:10px;">
+                 <div class="input-row">
                     <input type="number" id="height" placeholder="Enter height">
                     <select id="heightUnit">
                         <option value="cm">cm</option>
@@ -355,27 +431,28 @@
                     <div class="chart-indicator" id="chartIndicator" style="left: 0%;"></div>
                 </div>
                 <div class="chart-labels">
-                    <span>Underweight</span>
+                    <span>Under</span>
                     <span>Normal</span>
-                    <span>Overweight</span>
+                    <span>Over</span>
                     <span>Obese</span>
                 </div>
             </div>
         </div>
 
-        <!-- BMI History -->
         <div class="history-container">
             <h2>BMI History</h2>
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>BMI</th>
-                        <th>Category</th>
-                    </tr>
-                </thead>
-                <tbody id="historyBody"></tbody>
-            </table>
+            <div class="table-wrapper">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>BMI</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody"></tbody>
+                </table>
+            </div>
             <div class="button-group">
                 <button class="btn-clear-history" onclick="clearHistory()">Clear History</button>
             </div>
@@ -387,6 +464,7 @@
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
 
+        // Theme Logic
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
             const isDarkMode = body.classList.contains('dark-mode');
@@ -399,6 +477,23 @@
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
 
+        // Mobile Menu Logic
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenu.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // App Logic
         document.addEventListener('DOMContentLoaded', () => {
             loadHistory();
         });
@@ -411,13 +506,15 @@
             const resultDiv = document.getElementById('result');
 
             if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
-                resultDiv.innerHTML = '<p style="color: red;">Please enter valid weight and height.</p>';
+                resultDiv.innerHTML = '<p style="color: var(--danger-color);">Please enter valid weight and height.</p>';
                 return;
             }
 
+            // Convert to metric (kg and meters) for calculation
             if (weightUnit === 'lb') weight *= 0.453592;
+            
             if (heightUnit === 'cm') height /= 100;
-            if (heightUnit === 'in') height *= 0.0254;
+            else if (heightUnit === 'in') height *= 0.0254;
 
             const bmi = weight / (height * height);
             let category = '';
@@ -450,11 +547,16 @@
         function updateChart(bmi) {
             const indicator = document.getElementById('chartIndicator');
             let percentage = 0;
-            if (bmi < 18.5) percentage = (bmi / 18.5) * 25;
-            else if (bmi < 24.9) percentage = 25 + ((bmi - 18.5) / (24.9 - 18.5)) * 25;
-            else if (bmi < 29.9) percentage = 50 + ((bmi - 25) / (29.9 - 25)) * 25;
-            else percentage = 75 + ((bmi - 30) / 10) * 25;
-            percentage = Math.min(100, Math.max(0, percentage));
+            
+            // Map BMI to percentage (0 to 100% of the bar width)
+            // Note: This is an approximation for visual feedback
+            if (bmi < 15) percentage = 5;
+            else if (bmi > 40) percentage = 95;
+            else {
+                // Map range 15-40 to 0-100%
+                percentage = ((bmi - 15) / (40 - 15)) * 100;
+            }
+            
             indicator.style.left = `${percentage}%`;
         }
 
