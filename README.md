@@ -185,6 +185,7 @@ If you have any questions or need help, please:
 - [ ] Export calculations to PDF
 - [ ] More calculator types
 
+
 ## 📊 Browser Support
 
 - Chrome (latest)
